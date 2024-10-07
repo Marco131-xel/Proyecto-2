@@ -1,0 +1,104 @@
+<h1>Make Captchas</h1>
+
+<div class="main-container">
+    <!-- Columna izquierda-->
+    <div class="left-container">
+        <!-- Botones de inicio-->
+        <div class="file-buttons">
+            <input type="file" (change)="onFileChange($event)" accept=".cc">
+            <div class="save-buttons">
+                <button (click)="saveCode()">Guardar</button>
+                <button (click)="saveCodeAs()">Guardar como</button>
+            </div>
+        </div>
+        <!-- Mi editor-->
+        <div class="editor-container">
+            <div #lineCounter class="line-counter"></div>
+            <textarea #codeEditor [(ngModel)]="codeContent" (input)="updateLineCounter()" spellcheck="false"></textarea>
+        </div>
+        <!-- Botones de compilacion -->
+        <div class="compile-buttons">
+            <button (click)="compileCode()">Compilar</button>
+            <button (click)="createCaptcha()">Crear</button>
+            <div>
+                <button id="lista" (click)="listCaptchas()">Lista Captchas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna de derecha-->
+    <div class="right-container">
+        <!-- Tabla de Captcha-->
+        <h4>Tabla Captcha</h4>
+        <table border="1" id="captchaTable">
+            <thead>
+                <tr>
+                    <th>Nombre del Captcha</th>
+                    <th>Cantidad de veces Utilizado</th>
+                    <th>Cantidad de Aciertos</th>
+                    <th>Cantidad de Fallos</th>
+                    <th>Ultima Fecha de Utilización</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>reCAPTCHA</td>
+                    <td>100</td>
+                    <td>95</td>
+                    <td>5</td>
+                    <td>2024-10-03</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tabla de Errores -->
+        <h4>Tabla Errores</h4>
+        <table border="1" id="errorTable">
+            <thead>
+                <tr>
+                    <th>Tipo de Error</th>
+                    <th>Linea</th>
+                    <th>Columna</th>
+                    <th>Descripción</th>
+                    <th>Solución</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lexico</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>tax</td>
+                    <td>astrid</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tabla de Simbolos-->
+        <h4>Tabla Simbolos</h4>
+        <table border="1" id="symTable">
+            <thead>
+                <tr>
+                    <th>Posición</th>
+                    <th>Identificador</th>
+                    <th>Tipo</th>
+                    <th>Valor actual</th>
+                    <th>Modo</th>
+                    <th>Procedimiento</th>
+                    <th>No.Ejecución</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>contador_fallas</td>
+                    <td>integer</td>
+                    <td>0</td>
+                    <td>global</td>
+                    <td>FUNCTION_calc()</td>
+                    <td>1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

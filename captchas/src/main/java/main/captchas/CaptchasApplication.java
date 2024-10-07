@@ -1,4 +1,4 @@
-package com.company.captchas;
+package main.captchas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
