@@ -18,6 +18,12 @@ export class IdeComponent implements AfterViewInit {
 
   ngOnInit(): void {
     this.updateLineCounter();
+    if (typeof document !== 'undefined') {
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
+    }
   }
 
   onFileChange(event: any): void {
@@ -45,6 +51,9 @@ export class IdeComponent implements AfterViewInit {
     this.updateLineCounter();
     this.codeEditor.nativeElement.addEventListener('scroll', () => {
       this.lineCounter.nativeElement.scrollTop = this.codeEditor.nativeElement.scrollTop;
+    });
+    this.codeEditor.nativeElement.addEventListener('input', () => {
+      this.updateLineCounter();
     });
   }
 

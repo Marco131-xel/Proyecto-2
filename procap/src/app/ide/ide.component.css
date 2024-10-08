@@ -66,40 +66,44 @@ h1, h4 {
 }
 
 .editor-container {
-    position: relative;
-    display: flex;
-    height: 500px;
+  position: relative;
+  display: flex;
+  height: 500px;
+  overflow: hidden; 
 }
 
 .line-counter {
-    width: 25px;
-    background-color: #3c3f41;
-    color: #3498db;
-    text-align: right;
-    padding-right: 10px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    line-height: 1.5em; 
-    overflow: hidden;
-    user-select: none;
+  width: 25px;
+  background-color: #3c3f41;
+  color: #3498db;
+  text-align: right;
+  padding-right: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5em; 
+  overflow: hidden; 
+  user-select: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
 }
-  
+
 textarea {
-    flex: 1;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    line-height: 1.5em;
-    background-color: #1e1e1e;
-    color: #d4d4d4;
-    padding-left: 10px;
-    border: none;
-    outline: none;
-    resize: none;
-    overflow: auto;
-}
- 
-#codeEditor:focus {
-  border: 1px solid  #3498db ;
+  flex: 1;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5em;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding-left: 50px;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: auto;
+  white-space: pre; 
+  box-sizing: border-box;
 }
 
 /* Botones de compilacion */
