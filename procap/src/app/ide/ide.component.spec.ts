@@ -11,7 +11,7 @@ describe('IdeComponent', () => {
       imports: [IdeComponent]
     })
     .compileComponents();
-
+    
     fixture = TestBed.createComponent(IdeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

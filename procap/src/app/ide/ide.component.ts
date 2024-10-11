@@ -1,20 +1,25 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Importa el CommonModule
 
 @Component({
   selector: 'app-ide',
   standalone: true,
   templateUrl: './ide.component.html',
   styleUrls: ['./ide.component.css'],
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule] // Añade CommonModule a las importaciones
 })
 export class IdeComponent implements AfterViewInit {
   @ViewChild('codeEditor', { static: true }) codeEditor!: ElementRef;
   @ViewChild('lineCounter', { static: true }) lineCounter!: ElementRef;
 
   codeContent: string = '';
+  selectedFile: File | null = null;
+  backendResponse: string = '';
 
-  constructor(private cdr: ChangeDetectorRef) {} 
+  constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.updateLineCounter();
@@ -29,6 +34,7 @@ export class IdeComponent implements AfterViewInit {
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.selectedFile = file;
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.codeContent = e.target.result;
@@ -64,9 +70,27 @@ export class IdeComponent implements AfterViewInit {
   }
 
   compileCode() {
-    console.log('Compilar código:', this.codeContent);
-  }
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
 
+      this.http.post('http://localhost:8080/api/upload', formData, { responseType: 'text' })
+        .subscribe(
+          (response: string) => {
+            console.log('Respuesta del backend:', response);
+            this.backendResponse = response;
+          },
+          (error: HttpErrorResponse) => {
+            console.error('Error al compilar el código:', error);
+            this.backendResponse = 'Error al compilar el archivo.';
+          }
+        );
+    } else {
+      this.backendResponse = 'No se ha cargado ningún archivo.';
+      console.error('No se ha cargado ningún archivo.');
+    }
+  }
+  
   createCaptcha() {
     console.log('Crear nuevo captcha con el código:', this.codeContent);
   }
@@ -74,5 +98,4 @@ export class IdeComponent implements AfterViewInit {
   listCaptchas() {
     console.log('Mostrar lista de captchas');
   }
-
 }

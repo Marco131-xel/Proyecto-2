@@ -24,6 +24,11 @@
                 <button id="lista" (click)="listCaptchas()">Lista Captchas</button>
             </div>
         </div>
+
+        <div *ngIf="backendResponse">
+            <h3>Respuesta al Backend: </h3>
+            <pre>{{ backendResponse }}</pre>
+        </div>
     </div>
 
     <!-- Columna de derecha-->
