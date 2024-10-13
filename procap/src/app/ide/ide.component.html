@@ -69,12 +69,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Lexico</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>tax</td>
-                    <td>astrid</td>
+                <tr *ngFor="let error of errores">
+                    <td>{{error.tipo}}</td>
+                    <td>{{error.linea}}</td>
+                    <td>{{error.columna}}</td>
+                    <td>{{error.desc}}</td>
+                    <td>{{error.solucion}}</td>
                 </tr>
             </tbody>
         </table>

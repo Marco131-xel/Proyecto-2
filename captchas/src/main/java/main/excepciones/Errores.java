@@ -6,12 +6,14 @@ public class Errores {
     private String desc;
     private int linea;
     private int columna;
+    private String solucion;
 
-    public Errores(String tipo, String desc, int linea, int columna) {
+    public Errores(String tipo, String desc, int linea, int columna, String solucion) {
         this.tipo = tipo;
         this.desc = desc;
         this.linea = linea;
         this.columna = columna;
+        this.solucion = solucion;
     }
 
     public String getTipo() {
@@ -46,8 +48,16 @@ public class Errores {
         this.columna = columna;
     }
 
+    public String getSolucion() {
+        return solucion;
+    }
+
+    public void setSolucion(String solucion) {
+        this.solucion = solucion;
+    }
+
     @Override
     public String toString() {
-        return "Errores{" + "tipo=" + tipo + ", desc=" + desc + ", linea=" + linea + ", columna=" + columna + '}';
+        return "Errores{" + "tipo=" + tipo + ", desc=" + desc + ", linea=" + linea + ", columna=" + columna + ", solucion=" + solucion + '}';
     }
 }

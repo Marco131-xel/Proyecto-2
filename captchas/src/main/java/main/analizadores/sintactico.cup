@@ -1,0 +1,180 @@
+package main.analizadores;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import main.excepciones.Errores;
+
+parser code
+{:
+    scanner s;
+    parser(scanner s){this.s = s;}
+
+    public LinkedList<Errores> listaErrores = new LinkedList<>();
+
+     public void syntax_error(Symbol s){
+        listaErrores.add(new Errores("SINTACTICO RECUPERABLE",
+                        "No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right,
+                        "Verifica la Sintaxis"));
+    }
+
+    public void unrecovered_syntax_error (Symbol s){
+        listaErrores.add(new Errores("SINTACTICO NO RECUPERABLE",
+                        "No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right,
+                        "Ninguna"));
+    }
+
+    public LinkedList<Errores> getErrores(){
+        return listaErrores;
+    }
+:}
+
+action code
+{:
+:}
+// SIMBOLOS
+terminal PAR1, PAR2, MAS, MENOS, IGUAL, MENOR, MAYOR;
+terminal POR, DIVI, OR, AND, DIFER, FINCADENA, LLAVEA,LLAVEC;
+terminal CORCHEA, CORCHEC, DOSPTS, COMID;
+// CC = HTML
+terminal CC, HEAD, TITLE, LINK, BODY, SPAM, INPUT,TEXTAREA;
+terminal SELECT, OPTION, DIV, IMG, BR, BUTTON, TITUH, PARRA;
+terminal SCRIPT;
+// PARAMETROS
+terminal HREF, BACKG, COLOR, FONTFA, FONTSI, TEXTALI,TYPE;
+// VALORES
+terminal ID, NAME, COLS, ROWS, CLASS, SRC, WIDTH, HEIGHT, ALT, ONCLICK;
+// FUNCIONES CLC
+terminal ASC, DESC, LETPAR, LETIMPAR, REVERSE, CARALE, NUMALE;
+terminal ALEINF, EXIT, REDIRECT;
+// DECLARACIONES
+terminal INTERGER, BOOLEAN, STRING, DECIMAL, CHAR, TRUE, FALSE;
+// INSTRUCCIONES
+terminal INIT, END, INSERT;
+// SENTENCIAS Y  CICLOS
+terminal IF, THEN, ELSE, REPEAT, HUNTIL, WHILE, THENWHILE;
+// EXPRESIONES REGULARES
+terminal ENTERO, DECI, IDENTIFICADOR, VALOR;
+
+// CC
+nonterminal START, BASE, INTRODUCCION, CONTENIDOS, CONTENIDO;
+nonterminal INICIO, FIN, CABEZA_I, CABEZA_F, CUERPO_I, CUERPO_F;
+nonterminal TITU_I, TITU_F, DIREC_I, DIREC_F, BAN_I, BAN_F;
+nonterminal INT_I, INT_F, CUAD_I, CUAD_F, SELE_I, SELE_F;
+nonterminal OPT_I, OPT_F, DIV_I, DIV_F, IMG_I, IMG_F, BR_I;
+nonterminal BOTON_I, BOTON_F, TIH_I, TIH_F, PARA_I, PARA_F;
+nonterminal SCRIPT_I, SCRIPT_F;
+// PARAMETROS Y VALORES
+nonterminal ETIQUETA, PARAMETROS, VALORES;
+
+start with START;
+
+START ::= BASE;
+    /* LA BASE DE MI CC = HTML */
+BASE ::=    INICIO
+            CABEZA_I INTRODUCCION CABEZA_F
+            CUERPO_I CONTENIDOS CUERPO_F
+            FIN;
+
+INTRODUCCION ::= DIREC_I DIREC_F
+                 TITU_I VALOR TITU_F;
+
+CONTENIDOS ::= CONTENIDO
+             | CONTENIDOS CONTENIDO;
+             
+CONTENIDO ::= BAN_I BAN_F
+            | INT_I INT_F
+            | CUAD_I CUAD_F
+            | SELE_I SELE_F
+            | OPT_I OPT_F
+            | DIV_I DIV_F
+            | IMG_I IMG_F
+            | BR_I
+            | BOTON_I VALOR BOTON_F
+            | TIH_I VALOR TIH_F
+            | PARA_I VALOR PARA_F
+            | SCRIPT_I SCRIPT_F
+            ;
+
+    /* TODAS LAS ETIQUETAS DE MI CC = HTML*/
+INICIO ::= MENOR CC ETIQUETA MAYOR;
+FIN ::= MENOR DIVI CC MAYOR;
+
+CABEZA_I ::= MENOR HEAD ETIQUETA MAYOR;
+CABEZA_F ::= MENOR DIVI HEAD MAYOR;
+
+CUERPO_I ::= MENOR BODY ETIQUETA MAYOR;
+CUERPO_F ::= MENOR DIVI BODY MAYOR;
+
+/* LOS DEMAS ESTAN DENTRO*/
+TITU_I ::= MENOR TITLE ETIQUETA MAYOR;
+TITU_F ::= MENOR DIVI BODY MAYOR;
+
+DIREC_I ::= MENOR LINK ETIQUETA MAYOR;
+DIREC_F ::= MENOR DIVI LINK MAYOR;
+
+BAN_I ::= MENOR SPAM ETIQUETA MAYOR;
+BAN_F ::= MENOR DIVI SPAM MAYOR;
+
+INT_I ::= MENOR INPUT ETIQUETA MAYOR;
+INT_F ::= MENOR DIVI INPUT MAYOR;
+
+CUAD_I ::= MENOR TEXTAREA ETIQUETA MAYOR;
+CUAD_F ::= MENOR DIVI TEXTAREA MAYOR;
+
+SELE_I ::= MENOR SELECT ETIQUETA MAYOR;
+SELE_F ::= MENOR DIVI SELECT MAYOR;
+
+OPT_I ::= MENOR OPTION ETIQUETA MAYOR;
+OPT_F ::= MENOR DIVI OPTION MAYOR;
+
+DIV_I ::= MENOR DIV ETIQUETA MAYOR;
+DIV_F ::= MENOR DIVI DIV MAYOR;
+
+IMG_I ::= MENOR IMG ETIQUETA MAYOR;
+IMG_F ::= MENOR DIVI IMG MAYOR;
+
+BR_I ::= MENOR BR ETIQUETA MAYOR;
+
+BOTON_I ::= MENOR BUTTON ETIQUETA MAYOR;
+BOTON_F ::= MENOR DIVI BUTTON MAYOR;
+
+TIH_I ::= MENOR TITUH ETIQUETA MAYOR;
+TIH_F ::= MENOR DIVI TITUH MAYOR;
+
+PARA_I ::= MENOR PARRA ETIQUETA MAYOR;
+PARA_F ::= MENOR DIVI PARRA MAYOR;
+
+SCRIPT_I ::= MENOR SCRIPT ETIQUETA MAYOR;
+SCRIPT_F ::= MENOR DIVI SCRIPT MAYOR;
+
+    /* PARAMETROS Y VALORES */
+ETIQUETA ::= /* vacio */
+             | ETIQUETA PARAMETROS;
+
+PARAMETROS ::= CORCHEA VALORES CORCHEC;
+
+VALORES ::= HREF IGUAL COMID VALOR COMID 
+          | BACKG IGUAL COMID VALOR COMID
+          | COLOR IGUAL COMID VALOR COMID
+          | FONTSI IGUAL COMID VALOR COMID
+          | FONTFA IGUAL COMID VALOR COMID
+          | TEXTALI IGUAL COMID VALOR COMID
+          | TYPE IGUAL COMID VALOR COMID
+          | ID IGUAL COMID VALOR COMID
+          | NAME IGUAL COMID VALOR COMID
+          | COLS IGUAL COMID ENTERO COMID
+          | ROWS IGUAL COMID ENTERO COMID
+          | CLASS IGUAL COMID VALOR COMID
+          | SRC IGUAL COMID VALOR COMID
+          | WIDTH IGUAL COMID ENTERO COMID
+          | HEIGHT IGUAL COMID ENTERO COMID
+          | ALT IGUAL COMID VALOR COMID
+          | ONCLICK IGUAL COMID VALOR COMID
+          ;
+

@@ -2,14 +2,15 @@ import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } fr
 import { HttpClient } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Importa el CommonModule
+import { CommonModule } from '@angular/common';
+import { Errores } from '../errores';
 
 @Component({
   selector: 'app-ide',
   standalone: true,
   templateUrl: './ide.component.html',
   styleUrls: ['./ide.component.css'],
-  imports: [FormsModule, CommonModule] // Añade CommonModule a las importaciones
+  imports: [FormsModule, CommonModule] 
 })
 export class IdeComponent implements AfterViewInit {
   @ViewChild('codeEditor', { static: true }) codeEditor!: ElementRef;
@@ -18,6 +19,7 @@ export class IdeComponent implements AfterViewInit {
   codeContent: string = '';
   selectedFile: File | null = null;
   backendResponse: string = '';
+  errores: Errores[];
 
   constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {}
 
@@ -73,16 +75,22 @@ export class IdeComponent implements AfterViewInit {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
-
-      this.http.post('http://localhost:8080/api/upload', formData, { responseType: 'text' })
+      this.http.post<Errores[]>('http://localhost:8080/api/upload', formData)
         .subscribe(
-          (response: string) => {
+          (response: any) => {
+            // Si no hay errores, el backend devuelve una respuesta exitosa
             console.log('Respuesta del backend:', response);
-            this.backendResponse = response;
+            this.backendResponse = 'Archivo subido y procesado exitosamente';
           },
           (error: HttpErrorResponse) => {
-            console.error('Error al compilar el código:', error);
-            this.backendResponse = 'Error al compilar el archivo.';
+            // Manejar los errores devueltos como JSON
+            if (error.status === 400 && error.error instanceof Array) {
+              this.errores = error.error; 
+              this.backendResponse = 'Errores encontrados durante el análisis.';
+            } else {
+              console.error('Error al compilar el código:', error);
+              this.backendResponse = 'Error al compilar el archivo.';
+            }
           }
         );
     } else {
