@@ -128,15 +128,24 @@ HUNTIL="HUNTIL"
 WHILE="WHILE"
 THENWHILE="THENWHILE"
 
-// EXPRESIONES REGULARES 
+// EXPRESIONES REGULARES
+enlace="https?://[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+(/[a-zA-Z0-9._~:/?#@!$&'()*+,;=%-]*)?"
+colo=#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?|"black"|"olive"|"teal"|"red"|"blue"|
+        "maroon"|"navy"|"gray"|"lime"|"fuchsia"|"green"|"white"|"purple"|
+        "silver"|"yellow"|"aqua"
+size="\d+px"
+family="Courier"|"Verdana"|"Arial"|"Geneva"|"sans-serif"
+aling="left"|"right"|"center"|"justify"
+tipos="text"|"number"|"radio"|"checkbox"
+clase="row"|"column"
+th="\d+(px|%)"
 BLANCOS=[\ \r\t\f\n]+
 ENTERO=[0-9]+
 DECI=[0-9]+"."[0-9]+
-IDENTIFICADOR=[-_a-zA-Z]+[a-zA-Z0-9_]*
-VALOR=[a-zA-Z0-9_]+
-COMENTARIO_LINEA="!!".*\\n
+IDENTIFICADOR=[a-zA-Z0-9_\-\$]*
+VALOR=[a-zA-Z0-9]+([_ ]+[a-zA-Z0-9]+)*
+COMENTARIO_LINEA="!!"[^(\n|\r)]*
 COMENTARIO_MULTI="<!--" [^>]* "-->"
-
 
 %%
 // SIMBOLOS
@@ -229,6 +238,14 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {WHILE} {return new Symbol(sym.WHILE, yyline, yycolumn,yytext());}
 <YYINITIAL> {THENWHILE} {return new Symbol(sym.THENWHILE, yyline, yycolumn,yytext());}
 // EXPRESIONES REGULARES
+<YYINITIAL> {enlace} {return new Symbol(sym.enlace, yyline, yycolumn,yytext());}
+<YYINITIAL> {colo} {return new Symbol(sym.colo, yyline, yycolumn,yytext());}
+<YYINITIAL> {size} {return new Symbol(sym.size, yyline, yycolumn,yytext());}
+<YYINITIAL> {family} {return new Symbol(sym.family, yyline, yycolumn,yytext());}
+<YYINITIAL> {aling} {return new Symbol(sym.aling, yyline, yycolumn,yytext());}
+<YYINITIAL> {tipos} {return new Symbol(sym.tipos, yyline, yycolumn,yytext());}
+<YYINITIAL> {clase} {return new Symbol(sym.clase, yyline, yycolumn,yytext());}
+<YYINITIAL> {th} {return new Symbol(sym.th, yyline, yycolumn,yytext());}
 <YYINITIAL> {ENTERO} {return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
 <YYINITIAL> {DECI} {return new Symbol(sym.DECI, yyline, yycolumn,yytext());}
 <YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn,yytext());}

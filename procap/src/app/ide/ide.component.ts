@@ -48,11 +48,33 @@ export class IdeComponent implements AfterViewInit {
   }
 
   saveCode(): void {
-    console.log('Guardar el código: \n', this.codeContent);
+    if(this.selectedFile){
+      this.downloadFile(this.selectedFile.name, this.codeContent);
+    } else {
+      console.log('No hay archivo cargado,"use Guarda como" en su lugar')
+    }
   }
 
   saveCodeAs(): void {
-    console.log('Guardando como ...\n', this.codeContent);
+    const filename = prompt('Por favor, ingrese un nombre para el archivo:',"codigo.cc");
+    if(filename){
+      this.downloadFile(filename, this.codeContent);
+    }
+  }
+
+  private downloadFile(fileName: string, content: string): void {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    
+    document.body.appendChild(a);
+    a.click();
+    
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 
   ngAfterViewInit() {
