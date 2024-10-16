@@ -142,8 +142,8 @@ th="\d+(px|%)"
 BLANCOS=[\ \r\t\f\n]+
 ENTERO=[0-9]+
 DECI=[0-9]+"."[0-9]+
-IDENTIFICADOR=[a-zA-Z0-9_\-\$]*
-VALOR=[a-zA-Z0-9]+([_ ]+[a-zA-Z0-9]+)*
+IDENTIFICADOR=[a-zA-Z0-9_\-\$]+
+VALOR=[a-zA-Z0-9_]+([ \t]+[a-zA-Z0-9_]+)*
 COMENTARIO_LINEA="!!"[^(\n|\r)]*
 COMENTARIO_MULTI="<!--" [^>]* "-->"
 
