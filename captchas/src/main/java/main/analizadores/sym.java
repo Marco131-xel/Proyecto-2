@@ -8,100 +8,104 @@ package main.analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int IDENTIFICADOR = 92;
-  public static final int family = 85;
-  public static final int LETIMPAR = 58;
-  public static final int TYPE = 44;
-  public static final int ROWS = 48;
-  public static final int ASC = 55;
-  public static final int MAYOR = 8;
-  public static final int NAME = 46;
-  public static final int DIVI = 10;
-  public static final int INIT = 72;
-  public static final int ALT = 53;
-  public static final int enlace = 82;
-  public static final int POR = 9;
-  public static final int DIFER = 13;
-  public static final int TITUH = 35;
-  public static final int FALSE = 71;
-  public static final int THENWHILE = 81;
-  public static final int THEN = 76;
-  public static final int DECI = 91;
-  public static final int WIDTH = 51;
-  public static final int ALEINF = 62;
-  public static final int REVERSE = 59;
-  public static final int size = 84;
-  public static final int DOSPTS = 19;
-  public static final int NUMALE = 61;
-  public static final int PARRA = 36;
-  public static final int CLASS = 49;
-  public static final int SELECT = 29;
-  public static final int TEXTAREA = 28;
-  public static final int REDIRECT = 64;
-  public static final int ENTERO = 90;
-  public static final int HUNTIL = 79;
-  public static final int TRUE = 70;
-  public static final int IGUAL = 6;
+  public static final int IDENTIFICADOR = 96;
+  public static final int family = 89;
+  public static final int LETIMPAR = 60;
+  public static final int TYPE = 46;
+  public static final int ROWS = 50;
+  public static final int ASC = 57;
+  public static final int MAYOR = 10;
+  public static final int NAME = 48;
+  public static final int DIVI = 12;
+  public static final int INIT = 74;
+  public static final int ALT = 55;
+  public static final int enlace = 86;
+  public static final int POR = 11;
+  public static final int INTEGER = 67;
+  public static final int DIFER = 15;
+  public static final int TITUH = 37;
+  public static final int FALSE = 73;
+  public static final int ELEMENT = 84;
+  public static final int THENWHILE = 83;
+  public static final int THEN = 78;
+  public static final int DECI = 95;
+  public static final int WIDTH = 53;
+  public static final int ALEINF = 64;
+  public static final int REVERSE = 61;
+  public static final int size = 88;
+  public static final int DOSPTS = 21;
+  public static final int NUMALE = 63;
+  public static final int PARRA = 38;
+  public static final int CLASS = 51;
+  public static final int SELECT = 31;
+  public static final int TEXTAREA = 30;
+  public static final int REDIRECT = 66;
+  public static final int ENTERO = 94;
+  public static final int HUNTIL = 81;
+  public static final int TRUE = 72;
+  public static final int IGUAL = 7;
   public static final int PAR2 = 3;
   public static final int PAR1 = 2;
-  public static final int WHILE = 80;
-  public static final int COLS = 47;
-  public static final int DECIMAL = 68;
-  public static final int CHAR = 69;
-  public static final int BOOLEAN = 66;
-  public static final int LETPAR = 57;
-  public static final int INPUT = 27;
-  public static final int INTERGER = 65;
-  public static final int DIV = 31;
-  public static final int ELSE = 77;
+  public static final int WHILE = 82;
+  public static final int COLS = 49;
+  public static final int CHAR = 71;
+  public static final int DECIMAL = 70;
+  public static final int BOOLEAN = 68;
+  public static final int LETPAR = 59;
+  public static final int INPUT = 29;
+  public static final int DIV = 33;
+  public static final int ELSE = 79;
   public static final int MENOS = 5;
-  public static final int MENOR = 7;
+  public static final int MENOR = 9;
   public static final int MAS = 4;
-  public static final int BACKG = 39;
-  public static final int th = 89;
-  public static final int LINK = 24;
+  public static final int BACKG = 41;
+  public static final int th = 93;
+  public static final int LINK = 26;
   public static final int EOF = 0;
-  public static final int FONTSI = 42;
-  public static final int TEXTALI = 43;
-  public static final int BUTTON = 34;
-  public static final int CARALE = 60;
-  public static final int REPEAT = 78;
-  public static final int SPAM = 26;
-  public static final int SCRIPT = 37;
-  public static final int SRC = 50;
-  public static final int BODY = 25;
-  public static final int HREF = 38;
-  public static final int TITLE = 23;
-  public static final int tipos = 87;
-  public static final int OR = 11;
+  public static final int FONTSI = 44;
+  public static final int TEXTALI = 45;
+  public static final int BUTTON = 36;
+  public static final int CARALE = 62;
+  public static final int REPEAT = 80;
+  public static final int SPAM = 28;
+  public static final int SCRIPT = 39;
+  public static final int SRC = 52;
+  public static final int BODY = 27;
+  public static final int HREF = 40;
+  public static final int TITLE = 25;
+  public static final int tipos = 91;
+  public static final int OR = 13;
   public static final int error = 1;
-  public static final int EXIT = 63;
-  public static final int CC = 21;
-  public static final int IF = 75;
-  public static final int FINCADENA = 14;
-  public static final int DESC = 56;
-  public static final int ID = 45;
-  public static final int COLOR = 40;
-  public static final int FONTFA = 41;
-  public static final int HEAD = 22;
-  public static final int END = 73;
-  public static final int COMID = 20;
-  public static final int IMG = 32;
-  public static final int VALOR = 93;
-  public static final int aling = 86;
-  public static final int HEIGHT = 52;
-  public static final int BR = 33;
-  public static final int OPTION = 30;
-  public static final int CORCHEC = 18;
-  public static final int INSERT = 74;
-  public static final int STRING = 67;
-  public static final int CORCHEA = 17;
-  public static final int ONCLICK = 54;
-  public static final int clase = 88;
-  public static final int AND = 12;
-  public static final int LLAVEC = 16;
-  public static final int LLAVEA = 15;
-  public static final int colo = 83;
+  public static final int EXIT = 65;
+  public static final int CC = 23;
+  public static final int IF = 77;
+  public static final int FINCADENA = 16;
+  public static final int DESC = 58;
+  public static final int ID = 47;
+  public static final int COLOR = 42;
+  public static final int FONTFA = 43;
+  public static final int HEAD = 24;
+  public static final int END = 75;
+  public static final int COMID = 22;
+  public static final int UMENOS = 6;
+  public static final int IMG = 34;
+  public static final int VALOR = 97;
+  public static final int aling = 90;
+  public static final int HEIGHT = 54;
+  public static final int BR = 35;
+  public static final int GLOBAL = 85;
+  public static final int OPTION = 32;
+  public static final int CORCHEC = 20;
+  public static final int INSERT = 76;
+  public static final int STRING = 69;
+  public static final int CORCHEA = 19;
+  public static final int ONCLICK = 56;
+  public static final int clase = 92;
+  public static final int AND = 14;
+  public static final int LLAVEC = 18;
+  public static final int LLAVEA = 17;
+  public static final int EQUALS = 8;
+  public static final int colo = 87;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -109,7 +113,9 @@ public class sym {
   "PAR2",
   "MAS",
   "MENOS",
+  "UMENOS",
   "IGUAL",
+  "EQUALS",
   "MENOR",
   "MAYOR",
   "POR",
@@ -168,7 +174,7 @@ public class sym {
   "ALEINF",
   "EXIT",
   "REDIRECT",
-  "INTERGER",
+  "INTEGER",
   "BOOLEAN",
   "STRING",
   "DECIMAL",
@@ -185,6 +191,8 @@ public class sym {
   "HUNTIL",
   "WHILE",
   "THENWHILE",
+  "ELEMENT",
+  "GLOBAL",
   "enlace",
   "colo",
   "size",

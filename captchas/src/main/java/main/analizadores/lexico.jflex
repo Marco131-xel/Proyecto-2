@@ -104,7 +104,7 @@ EXIT="EXIT"
 REDIRECT="REDIRECT"
 
 // DECLARACIONES
-INTERGER="integer"
+INTEGER="integer"
 BOOLEAN="boolean"
 STRING="string"
 DECIMAL="decimal"
@@ -127,6 +127,10 @@ REPEAT="REPEAT"
 HUNTIL="HUNTIL"
 WHILE="WHILE"
 THENWHILE="THENWHILE"
+
+// ESPECIALES
+ELEMENT="getElemenById"
+GLOBAL="@global"
 
 // EXPRESIONES REGULARES
 enlace="https?://[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+(/[a-zA-Z0-9._~:/?#@!$&'()*+,;=%-]*)?"
@@ -217,7 +221,7 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {EXIT} {return new Symbol(sym.EXIT, yyline, yycolumn,yytext());}
 <YYINITIAL> {REDIRECT} {return new Symbol(sym.REDIRECT, yyline, yycolumn,yytext());}
 // DECLARACIONES
-<YYINITIAL> {INTERGER} {return new Symbol(sym.INTERGER, yyline, yycolumn,yytext());}
+<YYINITIAL> {INTEGER} {return new Symbol(sym.INTEGER, yyline, yycolumn,yytext());}
 <YYINITIAL> {BOOLEAN} {return new Symbol(sym.BOOLEAN, yyline, yycolumn,yytext());}
 <YYINITIAL> {STRING} {return new Symbol(sym.STRING, yyline, yycolumn,yytext());}
 <YYINITIAL> {DECIMAL} {return new Symbol(sym.DECIMAL, yyline, yycolumn,yytext());}
@@ -237,6 +241,9 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {HUNTIL} {return new Symbol(sym.HUNTIL, yyline, yycolumn,yytext());}
 <YYINITIAL> {WHILE} {return new Symbol(sym.WHILE, yyline, yycolumn,yytext());}
 <YYINITIAL> {THENWHILE} {return new Symbol(sym.THENWHILE, yyline, yycolumn,yytext());}
+
+<YYINITIAL> {ELEMENT} {return new Symbol(sym.ELEMENT, yyline, yycolumn,yytext());}
+<YYINITIAL> {GLOBAL} {return new Symbol(sym.GLOBAL, yyline, yycolumn,yytext());}
 // EXPRESIONES REGULARES
 <YYINITIAL> {enlace} {return new Symbol(sym.enlace, yyline, yycolumn,yytext());}
 <YYINITIAL> {colo} {return new Symbol(sym.colo, yyline, yycolumn,yytext());}
