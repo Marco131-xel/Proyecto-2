@@ -49,7 +49,8 @@ CORCHEA="["
 CORCHEC="]"
 DOSPTS=":"
 COMID="\""
-//COMIS= "\'"
+COMA=","
+COMIS= "\'"
 
 //CC = HTML 
 CC="C_CC"
@@ -121,6 +122,7 @@ INSERT="INSERT"
 IF="IF"
 THEN="THEN"
 ELSE="ELSE"
+ELIF="ELIF"
 
 // CICLO
 REPEAT="REPEAT"
@@ -131,9 +133,10 @@ THENWHILE="THENWHILE"
 // ESPECIALES
 ELEMENT="getElemenById"
 GLOBAL="@global"
+LOAD="ON_LOAD"
 
 // EXPRESIONES REGULARES
-enlace="https?://[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+(/[a-zA-Z0-9._~:/?#@!$&'()*+,;=%-]*)?"
+enlace=(https?:\/\/)?([\da-z\.-]+)\.([\/\w \.-]*)*\/?
 colo=#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?|"black"|"olive"|"teal"|"red"|"blue"|
         "maroon"|"navy"|"gray"|"lime"|"fuchsia"|"green"|"white"|"purple"|
         "silver"|"yellow"|"aqua"
@@ -144,10 +147,10 @@ tipos="text"|"number"|"radio"|"checkbox"
 clase="row"|"column"
 th="\d+(px|%)"
 BLANCOS=[\ \r\t\f\n]+
-ENTERO=[0-9]+
-DECI=[0-9]+"."[0-9]+
+ENTERO=(0|([1-9][0-9]*))
+DECI=(0|(-)?([1-9][0-9]*)(\.(0|([0-9]*[1-9]){1,4})))
 IDENTIFICADOR=[a-zA-Z0-9_\-\$]+
-VALOR=[a-zA-Z0-9_]+([ \t]+[a-zA-Z0-9_]+)*
+VALOR=[a-zA-Z0-9_]+([ \t]*[a-zA-Z0-9_]+)*
 COMENTARIO_LINEA="!!"[^(\n|\r)]*
 COMENTARIO_MULTI="<!--" [^>]* "-->"
 
@@ -172,6 +175,8 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {CORCHEC} {return new Symbol(sym.CORCHEC, yyline, yycolumn,yytext());}
 <YYINITIAL> {DOSPTS} {return new Symbol(sym.DOSPTS, yyline, yycolumn,yytext());}
 <YYINITIAL> {COMID} {return new Symbol(sym.COMID, yyline, yycolumn,yytext());}
+<YYINITIAL> {COMA} {return new Symbol(sym.COMA, yyline, yycolumn,yytext());}
+<YYINITIAL> {COMIS} {return new Symbol(sym.COMIS, yyline, yycolumn,yytext());}
 // CC = HTML
 <YYINITIAL> {CC} {return new Symbol(sym.CC, yyline, yycolumn,yytext());}
 <YYINITIAL> {HEAD} {return new Symbol(sym.HEAD, yyline, yycolumn,yytext());}
@@ -236,6 +241,7 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {IF} {return new Symbol(sym.IF, yyline, yycolumn,yytext());}
 <YYINITIAL> {THEN} {return new Symbol(sym.THEN, yyline, yycolumn,yytext());}
 <YYINITIAL> {ELSE} {return new Symbol(sym.ELSE, yyline, yycolumn,yytext());}
+<YYINITIAL> {ELIF} {return new Symbol(sym.ELIF, yyline, yycolumn,yytext());}
 // CICLO
 <YYINITIAL> {REPEAT} {return new Symbol(sym.REPEAT, yyline, yycolumn,yytext());}
 <YYINITIAL> {HUNTIL} {return new Symbol(sym.HUNTIL, yyline, yycolumn,yytext());}
