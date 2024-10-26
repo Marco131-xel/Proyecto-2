@@ -250,6 +250,7 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 
 <YYINITIAL> {ELEMENT} {return new Symbol(sym.ELEMENT, yyline, yycolumn,yytext());}
 <YYINITIAL> {GLOBAL} {return new Symbol(sym.GLOBAL, yyline, yycolumn,yytext());}
+<YYINITIAL> {LOAD} {return new Symbol(sym.LOAD, yyline, yycolumn,yytext());}
 // EXPRESIONES REGULARES
 <YYINITIAL> {enlace} {return new Symbol(sym.enlace, yyline, yycolumn,yytext());}
 <YYINITIAL> {colo} {return new Symbol(sym.colo, yyline, yycolumn,yytext());}

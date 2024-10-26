@@ -121,10 +121,6 @@ export class IdeComponent implements AfterViewInit {
     }
   }
   
-  createCaptcha() {
-    console.log('Crear nuevo captcha con el código:', this.codeContent);
-  }
-
   listCaptchas() {
     console.log('Mostrar lista de captchas');
   }

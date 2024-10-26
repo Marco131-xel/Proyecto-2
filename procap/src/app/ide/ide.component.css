@@ -6,7 +6,7 @@ body {
     padding: 20px;
   }
   
-  h1, h4 {
+  h1, h4, h3 {
     color: #3498db;
     font-family: 'Courier New', Courier, monospace;
   }
@@ -165,11 +165,11 @@ body {
   }
 
   /* Estilos de tabla */
-  #captchaTable th, #errorTable th, #symTable th {
+  #errorTable th{
     color:  #3498db ;
   }
   
-  #captchaTable td, #errorTable td, #symTable td {
+  #errorTable td{
     color: #a9b7c6;
   }
 
@@ -214,4 +214,8 @@ body {
   
   #lista:hover {
     background-color: #4e5254;
+  }
+
+  pre{
+    color: #a9b7c6;
   }

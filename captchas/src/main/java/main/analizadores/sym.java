@@ -8,8 +8,8 @@ package main.analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int IDENTIFICADOR = 99;
-  public static final int family = 92;
+  public static final int IDENTIFICADOR = 100;
+  public static final int family = 93;
   public static final int LETIMPAR = 62;
   public static final int TYPE = 48;
   public static final int ROWS = 52;
@@ -19,7 +19,7 @@ public class sym {
   public static final int DIVI = 12;
   public static final int INIT = 76;
   public static final int ALT = 57;
-  public static final int enlace = 89;
+  public static final int enlace = 90;
   public static final int ELIF = 82;
   public static final int POR = 11;
   public static final int INTEGER = 69;
@@ -29,11 +29,11 @@ public class sym {
   public static final int ELEMENT = 87;
   public static final int THENWHILE = 86;
   public static final int THEN = 80;
-  public static final int DECI = 98;
+  public static final int DECI = 99;
   public static final int WIDTH = 55;
   public static final int ALEINF = 66;
   public static final int REVERSE = 63;
-  public static final int size = 91;
+  public static final int size = 92;
   public static final int DOSPTS = 21;
   public static final int NUMALE = 65;
   public static final int PARRA = 40;
@@ -42,7 +42,7 @@ public class sym {
   public static final int TEXTAREA = 32;
   public static final int REDIRECT = 68;
   public static final int COMA = 23;
-  public static final int ENTERO = 97;
+  public static final int ENTERO = 98;
   public static final int HUNTIL = 84;
   public static final int TRUE = 74;
   public static final int IGUAL = 7;
@@ -60,8 +60,9 @@ public class sym {
   public static final int MENOS = 5;
   public static final int MENOR = 9;
   public static final int MAS = 4;
+  public static final int LOAD = 89;
   public static final int BACKG = 43;
-  public static final int th = 96;
+  public static final int th = 97;
   public static final int LINK = 28;
   public static final int EOF = 0;
   public static final int FONTSI = 46;
@@ -76,7 +77,7 @@ public class sym {
   public static final int BODY = 29;
   public static final int HREF = 42;
   public static final int TITLE = 27;
-  public static final int tipos = 94;
+  public static final int tipos = 95;
   public static final int OR = 13;
   public static final int error = 1;
   public static final int EXIT = 67;
@@ -92,8 +93,8 @@ public class sym {
   public static final int COMID = 22;
   public static final int UMENOS = 6;
   public static final int IMG = 36;
-  public static final int VALOR = 100;
-  public static final int aling = 93;
+  public static final int VALOR = 101;
+  public static final int aling = 94;
   public static final int HEIGHT = 56;
   public static final int BR = 37;
   public static final int GLOBAL = 88;
@@ -103,12 +104,12 @@ public class sym {
   public static final int STRING = 71;
   public static final int CORCHEA = 19;
   public static final int ONCLICK = 58;
-  public static final int clase = 95;
+  public static final int clase = 96;
   public static final int AND = 14;
   public static final int LLAVEC = 18;
   public static final int LLAVEA = 17;
   public static final int EQUALS = 8;
-  public static final int colo = 90;
+  public static final int colo = 91;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -199,6 +200,7 @@ public class sym {
   "THENWHILE",
   "ELEMENT",
   "GLOBAL",
+  "LOAD",
   "enlace",
   "colo",
   "size",
