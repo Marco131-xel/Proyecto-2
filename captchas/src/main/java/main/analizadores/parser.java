@@ -869,6 +869,7 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
     scanner s;
+    String styleAttributes = "";
     parser(scanner s){this.s = s;}
 
     public LinkedList<Errores> listaErrores = new LinkedList<>();
@@ -1721,7 +1722,13 @@ class CUP$parser$actions {
           case 78: // ETIQUETA4 ::= LIST_VAL4 
             {
               Object RESULT =null;
-
+		
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ETIQUETA4",42, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1739,7 +1746,13 @@ class CUP$parser$actions {
           case 80: // ETIQUETA5 ::= LIST_VAL5 
             {
               Object RESULT =null;
-
+		
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ETIQUETA5",43, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1757,7 +1770,13 @@ class CUP$parser$actions {
           case 82: // ETIQUETA6 ::= LIST_VAL6 
             {
               Object RESULT =null;
-
+		
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ETIQUETA6",44, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1775,7 +1794,13 @@ class CUP$parser$actions {
           case 84: // ETIQUETA7 ::= LIST_VAL7 
             {
               Object RESULT =null;
-
+		
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ETIQUETA7",45, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1811,7 +1836,13 @@ class CUP$parser$actions {
           case 88: // ETIQUETA9 ::= LIST_VAL9 
             {
               Object RESULT =null;
-
+		
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ETIQUETA9",47, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1994,7 +2025,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"font-size: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "font-size: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_N",66, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2006,7 +2037,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"font-family: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "font-family: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_N",66, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2018,7 +2049,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"text-align: "+a+";\" "; addToHtml(RESULT.toString()); 
+		styleAttributes += "text-align: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_N",66, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2090,7 +2121,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "color: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_4",60, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2135,7 +2166,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "color: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_5",61, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2189,7 +2220,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "color: "+a+";";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_7",63, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2201,7 +2232,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"background: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "background: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_7",63, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2294,7 +2325,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "color: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_9",65, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2306,7 +2337,7 @@ class CUP$parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 RESULT = " style=\"background: "+a+";\" "; addToHtml(RESULT.toString()); 
+		 styleAttributes += "background: "+a+";"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VALOR_9",65, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

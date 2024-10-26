@@ -12,6 +12,7 @@ import java.io.IOException;
 parser code
 {:
     scanner s;
+    String styleAttributes = "";
     parser(scanner s){this.s = s;}
 
     public LinkedList<Errores> listaErrores = new LinkedList<>();
@@ -214,22 +215,52 @@ ETIQUETA2 ::= LIST_VAL2
 ETIQUETA3 ::= LIST_VAL3
             | /*vacio*/;
 
-ETIQUETA4 ::= LIST_VAL4
+ETIQUETA4 ::= LIST_VAL4 {:
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            :}
             | /*vacio*/;
 
-ETIQUETA5 ::= LIST_VAL5
+ETIQUETA5 ::= LIST_VAL5 {:
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            :}
             | /*vacio*/;
 
-ETIQUETA6 ::= LIST_VAL6
+ETIQUETA6 ::= LIST_VAL6 {:
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            :}
             | /*vacio*/;
 
-ETIQUETA7 ::= LIST_VAL7
+ETIQUETA7 ::= LIST_VAL7 {:
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            :}
             | /*vacio*/;
 
 ETIQUETA8 ::= LIST_VAL8
             | /*vacio*/;
 
-ETIQUETA9 ::= LIST_VAL9
+ETIQUETA9 ::= LIST_VAL9 {:
+                if(!styleAttributes.isEmpty()){
+                    RESULT = " style=\"" + styleAttributes.trim() + "\" ";
+                    addToHtml(RESULT.toString());
+                    styleAttributes = "";
+                }
+            :}
             | /*vacio*/;
 
 // LISTA DE VALORES
@@ -261,9 +292,9 @@ LIST_VAL9 ::= VALOR_9
             | LIST_VAL9 VALOR_9;
 
 // VALORES
-VALOR_N ::= CORCHEA FONTSI IGUAL COMID size:a COMID CORCHEC {: RESULT = " style=\"font-size: "+a+";\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA FONTFA IGUAL COMID family:a COMID CORCHEC {: RESULT = " style=\"font-family: "+a+";\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA TEXTALI IGUAL COMID aling:a COMID CORCHEC {: RESULT = " style=\"text-align: "+a+";\" "; addToHtml(RESULT.toString()); :}
+VALOR_N ::= CORCHEA FONTSI IGUAL COMID size:a COMID CORCHEC {: styleAttributes += "font-size: "+a+";"; :}
+          | CORCHEA FONTFA IGUAL COMID family:a COMID CORCHEC {: styleAttributes += "font-family: "+a+";"; :}
+          | CORCHEA TEXTALI IGUAL COMID aling:a COMID CORCHEC {:styleAttributes += "text-align: "+a+";"; :}
           | CORCHEA ID IGUAL COMID IDENTIFICADOR:a COMID CORCHEC {: RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString()); :};
 
 VALOR_1 ::= CORCHEA ID IGUAL COMID IDENTIFICADOR:a COMID CORCHEC {: RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString()); :}
@@ -273,20 +304,20 @@ VALOR_2 ::= CORCHEA HREF IGUAL COMID enlace:a COMID CORCHEC {: RESULT = " href=\
 
 VALOR_3 ::= CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"background: "+a+";\" "; addToHtml(RESULT.toString()); :}; 
 
-VALOR_4 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); :}
+VALOR_4 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";"; :}
           | VALOR_N;
 
 VALOR_5 ::= CORCHEA TYPE IGUAL COMID tipos:a COMID CORCHEC {: RESULT = " type=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | CORCHEA NAME IGUAL COMID VALOR:a COMID CORCHEC {: RESULT = " name=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); :}
+          | CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";"; :}
           | VALOR_N;
 
 VALOR_6 ::= CORCHEA COLS IGUAL COMID ENTERO:a COMID CORCHEC {: RESULT = " cols=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | CORCHEA ROWS IGUAL COMID ENTERO:a COMID CORCHEC {: RESULT = " rows=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | VALOR_N;
 
-VALOR_7 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"background: "+a+";\" "; addToHtml(RESULT.toString()); :}
+VALOR_7 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";";:}
+          | CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "background: "+a+";"; :}
           | CORCHEA CLASS IGUAL COMID clase:a COMID CORCHEC {: RESULT = " class=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | VALOR_N;
 
@@ -296,8 +327,8 @@ VALOR_8 ::= CORCHEA ID IGUAL COMID IDENTIFICADOR:a COMID CORCHEC {: RESULT = " i
           | CORCHEA HEIGHT IGUAL COMID th:a COMID CORCHEC {: RESULT = " height=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | CORCHEA ALT IGUAL COMID VALOR:a COMID CORCHEC {: RESULT = " alt=\""+a+"\" "; addToHtml(RESULT.toString()); :};
 
-VALOR_9 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"color: "+a+";\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"background: "+a+";\" "; addToHtml(RESULT.toString()); :}
+VALOR_9 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";"; :}
+          | CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "background: "+a+";"; :}
           | CORCHEA ONCLICK IGUAL COMID IDENTIFICADOR:a PAR1 PAR2 COMID CORCHEC {: RESULT = " onclick=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | VALOR_N;
 
