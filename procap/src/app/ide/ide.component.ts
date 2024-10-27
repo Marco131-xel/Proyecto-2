@@ -4,6 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Errores } from '../errores';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ide',
@@ -21,7 +22,7 @@ export class IdeComponent implements AfterViewInit {
   backendResponse: string = '';
   errores: Errores[];
 
-  constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {}
+  constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.updateLineCounter();
@@ -123,5 +124,6 @@ export class IdeComponent implements AfterViewInit {
   
   listCaptchas() {
     console.log('Mostrar lista de captchas');
+    this.router.navigate(['/lista-captchas']);
   }
 }

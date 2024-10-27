@@ -1,0 +1,52 @@
+<body>
+    <h1>Lista de paginas Captchas</h1>
+    <div>
+        <!-- Tabla de Captcha-->
+      <h4>Tabla Captcha</h4>
+      <table border="1" id="captchaTable">
+          <thead>
+              <tr>
+                  <th>Nombre del Captcha</th>
+                  <th>Cantidad de veces Utilizado</th>
+                  <th>Cantidad de Aciertos</th>
+                  <th>Cantidad de Fallos</th>
+                  <th>Ultima Fecha de Utilización</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>reCAPTCHA</td>
+                  <td>100</td>
+                  <td>95</td>
+                  <td>5</td>
+                  <td>2024-10-03</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+    <div>
+      <h4>Tabla Captcha</h4>
+      <table border="1" id="captchaTable">
+        <thead>
+          <tr>
+            <th>Nombre del Captcha</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let captcha of captchas">
+            <td>{{ captcha }}</td>
+            <td>
+              <button (click)="abrirCaptcha(captcha)">Abrir</button>
+              <button (click)="eliminarCaptcha(captcha)">Eliminar</button>
+              <button (click)="verDetalles(captcha)">Detalles</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <button (click)="regresar()">Regresar al IDE</button> 
+    </div>
+  </body>
+  
