@@ -14,10 +14,10 @@ export class ListaCaptchasComponent implements OnInit {
   captchas: string[] = [];
   selectedDetails: { id: string; name: string } | null = null;
 
-  constructor(private http: HttpClient, private router: Router){}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-      this.loadCaptchas();
+    this.loadCaptchas();
   }
 
   loadCaptchas() {
@@ -28,12 +28,12 @@ export class ListaCaptchasComponent implements OnInit {
       );
   }
 
-  abrirCaptcha(captcha: string){
+  abrirCaptcha(captcha: string) {
     const url = `http://localhost:8080/${captcha}`;
     window.open(url, '_blank');
   }
 
-  eliminarCaptcha(captcha: string){
+  eliminarCaptcha(captcha: string) {
     if (confirm(`¿Estás seguro de que deseas eliminar ${captcha}?`)) {
       this.http.delete(`http://localhost:8080/api/delete-captcha/${captcha}`)
         .subscribe(
@@ -64,7 +64,11 @@ export class ListaCaptchasComponent implements OnInit {
       );
   }
 
-  regresar(){
+  getCaptchaLink(captcha: string): string {  // Asegúrate de que este método está aquí
+    return `http://localhost:8080/${captcha}`;
+  }
+
+  regresar() {
     this.router.navigate(['/']);
   }
 }

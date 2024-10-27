@@ -24,13 +24,15 @@
           </tbody>
       </table>
     </div>
+    <!-- los captchas creados -->
     <div>
-      <h4>Tabla Captcha</h4>
+      <h4>Captcha Generados</h4>
       <table border="1" id="captchaTable">
         <thead>
           <tr>
             <th>Nombre del Captcha</th>
             <th>Opciones</th>
+            <th>Link</th>
           </tr>
         </thead>
         <tbody>
@@ -41,10 +43,19 @@
               <button (click)="eliminarCaptcha(captcha)">Eliminar</button>
               <button (click)="verDetalles(captcha)">Detalles</button>
             </td>
+            <td>
+              <a [href]="getCaptchaLink(captcha)" target="_blank">{{ getCaptchaLink(captcha) }}</a>
+            </td>
           </tr>
         </tbody>
       </table>
+      <div *ngIf="selectedDetails">
+        <h4>Detalles del Captcha</h4>
+        <p>ID: {{ selectedDetails.id }}</p>
+        <p>Nombre: {{ selectedDetails.name }}</p>
+      </div>
     </div>
+    
     <div>
       <button (click)="regresar()">Regresar al IDE</button> 
     </div>

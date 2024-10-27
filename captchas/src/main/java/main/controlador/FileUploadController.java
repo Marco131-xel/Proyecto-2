@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
@@ -33,15 +34,19 @@ public class FileUploadController {
             MakeCC make = new MakeCC();
             String ruta = System.getProperty("user.dir");
             String outputFile = ruta + "/target/data/" + file.getOriginalFilename().replace(".cc", ".html");
+            
+            System.out.println("Ruta de salida: " + outputFile);
             LinkedList<Errores> errores = make.translatehtml(file.getInputStream(), outputFile);
 
             if (!errores.isEmpty()) {
+                System.out.println("Se encontraron errores: " + errores);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
             }
-
-            return ResponseEntity.ok("Archivo subido y procesado exitosamente");
+            
+            System.out.println("Procesamiento exitoso, enviando respuesta.");
+            return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body("Archivo subido y procesado exitosamente");
         } catch (Exception e) {
-            e.printStackTrace();  // Esto imprimirá el stack trace en la consola
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir el archivo: " + e.getMessage());
         }
     }

@@ -77,3 +77,12 @@ button:disabled {
     background-color: #4e5254;
     cursor: not-allowed;
 }
+
+a{
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
