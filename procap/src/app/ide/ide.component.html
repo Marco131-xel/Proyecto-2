@@ -6,6 +6,9 @@
         <!-- Botones de inicio-->
         <div class="file-buttons">
             <input type="file" (change)="onFileChange($event)" accept=".cc">
+            <div class="cursor-info">
+                Linea: {{currentLine}}  Columna: {{currentColumn}}
+            </div>
             <div class="save-buttons">
                 <button (click)="saveCode()">Guardar</button>
                 <button (click)="saveCodeAs()">Guardar como</button>
@@ -14,7 +17,8 @@
         <!-- Mi editor-->
         <div class="editor-container">
             <div #lineCounter class="line-counter"></div>
-            <textarea #codeEditor [(ngModel)]="codeContent" (input)="updateLineCounter()" spellcheck="false"></textarea>
+            <textarea #codeEditor [(ngModel)]="codeContent" (input)="updateLineCounter()" (click)="updateCursorPosition()" 
+            (keydown)="updateCursorPosition()" (keyup)="updateCursorPosition()" spellcheck="false"></textarea>
         </div>
         <!-- Botones de compilacion -->
         <div class="compile-buttons">
@@ -49,7 +53,7 @@
         </table>
 
         <div *ngIf="backendResponse">
-            <h3>Respuesta al Backend: </h3>
+            <h3>Respuesta: </h3>
             <pre>{{ backendResponse }}</pre>
         </div>
     </div>

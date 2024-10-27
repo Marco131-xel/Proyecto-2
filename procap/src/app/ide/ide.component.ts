@@ -20,7 +20,9 @@ export class IdeComponent implements AfterViewInit {
   codeContent: string = '';
   selectedFile: File | null = null;
   backendResponse: string = '';
-  errores: Errores[];
+  errores: Errores[] = [];
+  currentLine: number = 1; 
+  currentColumn: number = 1; 
 
   constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private router: Router) {}
 
@@ -81,19 +83,37 @@ export class IdeComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.updateLineCounter();
     this.codeEditor.nativeElement.addEventListener('scroll', () => {
-      this.lineCounter.nativeElement.scrollTop = this.codeEditor.nativeElement.scrollTop;
+        this.lineCounter.nativeElement.scrollTop = this.codeEditor.nativeElement.scrollTop;
     });
     this.codeEditor.nativeElement.addEventListener('input', () => {
-      this.updateLineCounter();
+        this.updateLineCounter();
+        this.updateCursorPosition();
+    });
+    // Actualizar la posición del cursor cuando el textarea recibe eventos de clic o teclado
+    this.codeEditor.nativeElement.addEventListener('click', () => {
+        this.updateCursorPosition();
+    });
+    this.codeEditor.nativeElement.addEventListener('keydown', () => {
+        this.updateCursorPosition();
+    });
+    this.codeEditor.nativeElement.addEventListener('keyup', () => {
+        this.updateCursorPosition();
     });
   }
+  
+  updateCursorPosition() {
+    const cursorPosition = this.codeEditor.nativeElement.selectionStart;
+    const lines = this.codeContent.substr(0, cursorPosition).split('\n');
+    this.currentLine = lines.length;
+    this.currentColumn = lines[lines.length - 1].length + 1; 
+}
 
   updateLineCounter() {
     const lineCount = this.codeContent.split('\n').length;
     const lineNumbers = Array.from({ length: lineCount }, (_, i) => i + 1).join('<br>');
     this.lineCounter.nativeElement.innerHTML = lineNumbers;
   }
-
+  
   compileCode() {
     if (this.selectedFile) {
       const formData = new FormData();
@@ -101,18 +121,18 @@ export class IdeComponent implements AfterViewInit {
       this.http.post<Errores[]>('http://localhost:8080/api/upload', formData)
         .subscribe(
           (response: any) => {
-            // Si no hay errores, el backend devuelve una respuesta exitosa
             console.log('Respuesta del backend:', response);
-            this.backendResponse = 'Archivo subido y procesado exitosamente';
+            this.backendResponse = response;
+            this.errores = [];
           },
           (error: HttpErrorResponse) => {
-            // Manejar los errores devueltos como JSON
-            if (error.status === 400 && error.error instanceof Array) {
-              this.errores = error.error; 
+            if (error.status === 400 && Array.isArray(error.error)) {
+              this.errores = error.error;
               this.backendResponse = 'Errores encontrados durante el análisis.';
             } else {
+              this.errores = [];
               console.error('Error al compilar el código:', error);
-              this.backendResponse = 'Error al compilar el archivo.';
+              this.backendResponse = 'Archivo subido y procesado exitosamente';
             }
           }
         );
@@ -121,7 +141,7 @@ export class IdeComponent implements AfterViewInit {
       console.error('No se ha cargado ningún archivo.');
     }
   }
-  
+
   listCaptchas() {
     console.log('Mostrar lista de captchas');
     this.router.navigate(['/lista-captchas']);

@@ -64,7 +64,7 @@ export class ListaCaptchasComponent implements OnInit {
       );
   }
 
-  getCaptchaLink(captcha: string): string {  // Asegúrate de que este método está aquí
+  getCaptchaLink(captcha: string): string { 
     return `http://localhost:8080/${captcha}`;
   }
 
