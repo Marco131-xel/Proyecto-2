@@ -94,9 +94,9 @@ terminal String VALOR;
 nonterminal START, BASE, INTRODUCCION, CONTENIDOS, CONTENIDO;
 nonterminal LIST_OPT, CUAOPT, LIST_SPAN, SPAN;
 nonterminal INICIO, FIN, CABEZA_I, CABEZA_F, CUERPO_I, CUERPO_F;
-nonterminal TITU_I, TITU_F, DIREC_I, BAN_I, BAN_F;
-nonterminal INT_I, CUAD_I, CUAD_F, SELE_I, SELE_F;
-nonterminal OPT_I, OPT_F, DIV_I, DIV_F, IMG_I, BR_I;
+nonterminal TITU_I, TITU_F, DIREC_I, DIREC_F, BAN_I, BAN_F;
+nonterminal INT_I, INT_F, CUAD_I, CUAD_F, SELE_I, SELE_F;
+nonterminal OPT_I, OPT_F, DIV_I, DIV_F, IMG_I, IMG_F, BR_I, BR_F;
 nonterminal BOTON_I, BOTON_F, TIH_I, TIH_F, PARA_I, PARA_F;
 nonterminal SCRIPT_I, SCRIPT_F;
 // PARAMETROS Y VALORES
@@ -105,7 +105,7 @@ nonterminal LIST_VAL1, LIST_VAL2, LIST_VAL3, LIST_VAL4, LIST_VAL5, LIST_VAL6, LI
 nonterminal VALOR_1, VALOR_2, VALOR_3, VALOR_4, VALOR_5, VALOR_6, VALOR_7, VALOR_8, VALOR_9, VALOR_N;
 // FUNCIONES CLC 
 nonterminal INSTRUCCIONES, INSTRUCCION, IMPRESION, DECLARACION, ASIGNACION, TIPOS, EXPRESION;
-nonterminal FUNCSP, CADENA, BLOINST, GET, CSP, ISTR, OPCIONES, LISTA_VAR, DECLA_ASIG, LISTA_ASIG;
+nonterminal FUNCSP, CADENA, BLOINST, GET, CSP, ISTR, OPCIONES, LISTA_VAR, DECLA_ASIG, LISTA_ASIG, LISTA_OPCIONES;
 nonterminal SELIF, SIF;
 nonterminal REPETIR, CICLO;
 
@@ -124,20 +124,20 @@ BASE ::=    INICIO
             CUERPO_I CONTENIDOS CUERPO_F
             FIN;
 
-INTRODUCCION ::= DIREC_I 
+INTRODUCCION ::= DIREC_I DIREC_F
                  TITU_I VALOR:a {: RESULT=a; addToHtml(RESULT.toString()); :} TITU_F;
 
 CONTENIDOS ::= CONTENIDO
              | CONTENIDOS CONTENIDO; 
 
 CONTENIDO ::= TIH_I VALOR:a {: RESULT=a; addToHtml(RESULT.toString()); :} TIH_F
-            | INT_I
+            | INT_I INT_F
             | BAN_I VALOR:a {: RESULT=a; addToHtml(RESULT.toString()); :} BAN_F 
             | CUAD_I CUAD_F
             | SELE_I LIST_OPT SELE_F
             | DIV_I CONTENIDOS DIV_F
-            | IMG_I 
-            | BR_I
+            | IMG_I IMG_F
+            | BR_I BR_F
             | BOTON_I VALOR:a {: RESULT=a; addToHtml(RESULT.toString()); :} BOTON_F
             | PARA_I LIST_SPAN PARA_F
             | SCRIPT_I INSTRUCCIONES SCRIPT_F
@@ -170,11 +170,13 @@ TITU_I ::= MENOR TITLE MAYOR {: RESULT = "<title>"; addToHtml(RESULT.toString())
 TITU_F ::= MENOR DIVI TITLE MAYOR {: RESULT = "</title>\n"; addToHtml(RESULT.toString()); :};
 
 DIREC_I ::= MENOR LINK {: RESULT = "<link"; addToHtml(RESULT.toString()); :} ETIQUETA2 MAYOR {: RESULT = ">\n"; addToHtml(RESULT.toString()); :};
+DIREC_F ::= MENOR DIVI LINK MAYOR;
 
 BAN_I ::= MENOR SPAM {: RESULT = "<span"; addToHtml(RESULT.toString()); :} ETIQUETA4 MAYOR {: RESULT = ">"; addToHtml(RESULT.toString()); :};
 BAN_F ::= MENOR DIVI SPAM MAYOR {: RESULT = "</span>"; addToHtml(RESULT.toString()); :};
 
 INT_I ::= MENOR INPUT {: RESULT = "<input"; addToHtml(RESULT.toString()); :} ETIQUETA5 MAYOR {: RESULT = ">\n"; addToHtml(RESULT.toString()); :};
+INT_F ::= MENOR DIVI INPUT MAYOR;
 
 CUAD_I ::= MENOR TEXTAREA {: RESULT = "<textarea"; addToHtml(RESULT.toString()); :} ETIQUETA6 MAYOR {: RESULT = ">\n"; addToHtml(RESULT.toString()); :};
 CUAD_F ::= MENOR DIVI TEXTAREA MAYOR {: RESULT = "</textarea>\n"; addToHtml(RESULT.toString()); :};
@@ -189,8 +191,10 @@ DIV_I ::= MENOR DIV {: RESULT = "<div"; addToHtml(RESULT.toString()); :} ETIQUET
 DIV_F ::= MENOR DIVI DIV MAYOR {: RESULT = "</div>\n"; addToHtml(RESULT.toString()); :};
 
 IMG_I ::= MENOR IMG {: RESULT = "<img"; addToHtml(RESULT.toString()); :} ETIQUETA8 MAYOR {: RESULT = ">\n"; addToHtml(RESULT.toString()); :};
+IMG_F ::= MENOR DIVI IMG MAYOR;
 
 BR_I ::= MENOR BR MAYOR {: RESULT = "<br>\n"; addToHtml(RESULT.toString()); :};
+BR_F ::= MENOR DIVI BR MAYOR;
 
 BOTON_I ::= MENOR BUTTON {: RESULT = "<button"; addToHtml(RESULT.toString()); :} ETIQUETA9 MAYOR {: RESULT = ">"; addToHtml(RESULT.toString()); :};
 BOTON_F ::= MENOR DIVI BUTTON MAYOR {: RESULT = "</button>\n"; addToHtml(RESULT.toString()); :};
@@ -360,8 +364,8 @@ FUNCSP ::= ASC
          | ALEINF
 ;
 
-CSP ::= EXIT
-      | REDIRECT;
+CSP ::= EXIT PAR1 PAR2 FINCADENA
+      | REDIRECT PAR1 PAR2 FINCADENA;
 
 ASIGNACION ::= LISTA_VAR IGUAL EXPRESION FINCADENA;
 
@@ -384,9 +388,10 @@ TIPOS ::= INTEGER
         | BOOLEAN 
 ;
 
-CADENA ::= COMID VALOR COMID;
+CADENA ::= COMID VALOR COMID
+         | COMID ENTERO COMID;
 
-GET ::= ELEMENT PAR1 COMIS IDENTIFICADOR COMIS PAR2 FINCADENA;
+GET ::= ELEMENT PAR1 COMIS IDENTIFICADOR COMIS PAR2;
 
 ISTR ::= INSERT PAR1 COMIS IDENTIFICADOR COMIS PAR2 FINCADENA;
 
@@ -413,12 +418,15 @@ EXPRESION ::= MENOS EXPRESION %prec UMENOS
             | FALSE
             | PAR1 EXPRESION PAR2;
 
+LISTA_OPCIONES ::= OPCIONES
+                 | LISTA_OPCIONES OPCIONES;
+
 OPCIONES ::= IMPRESION
-           | CSP FINCADENA
+           | CSP
            | ISTR;
 //INSTRUCCION
 BLOINST ::= INIT LLAVEA DOSPTS 
-                OPCIONES
+                LISTA_OPCIONES
             DOSPTS LLAVEC END;
 
 // SENTENCIAS IF 

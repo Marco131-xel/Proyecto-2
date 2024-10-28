@@ -13,6 +13,15 @@ public class Nativo extends Instruccion {
     }
 
     @Override
+    public String generarCodigo() {
+        if (valor instanceof String) {
+            return "\"" + valor + "\"";
+        } else {
+            return valor.toString();
+        }
+    }
+
+    @Override
     public Object interpretar(Arbol arbol, TablaSimbolos tabla) {
         return this.valor;
     }
