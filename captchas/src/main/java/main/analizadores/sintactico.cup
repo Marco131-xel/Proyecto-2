@@ -9,6 +9,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import main.abstracto.*;
+import main.instrucciones.*;
+import main.expresiones.*;
+import main.simbolo.*;
+
 parser code
 {:
     scanner s;
@@ -57,8 +62,8 @@ action code
 :}
 // SIMBOLOS
 terminal PAR1, PAR2, MAS, MENOS, UMENOS, IGUAL, EQUALS, MENOR, MAYOR;
-terminal POR, DIVI, OR, AND, DIFER, FINCADENA, LLAVEA,LLAVEC;
-terminal CORCHEA, CORCHEC, DOSPTS, COMID, COMA, COMIS;
+terminal POR, DIVI, OR, AND, DIFER, NOT, FINCADENA, LLAVEA,LLAVEC;
+terminal CORCHEA, CORCHEC, DOSPTS, COMA;
 // CC = HTML
 terminal CC, HEAD, TITLE, LINK, BODY, SPAM, INPUT,TEXTAREA;
 terminal SELECT, OPTION, DIV, IMG, BR, BUTTON, TITUH, PARRA;
@@ -85,10 +90,12 @@ terminal String aling;
 terminal String tipos;
 terminal String clase;
 terminal String th;
-terminal Integer ENTERO;
-terminal Double  DECI;
+terminal String ENTERO;
+terminal String DECI;
 terminal String IDENTIFICADOR;
-terminal String VALOR;
+terminal String CADENA;
+terminal String CARACTER;
+terminal String VALOR;  
 
 // CC
 nonterminal START, BASE, INTRODUCCION, CONTENIDOS, CONTENIDO;
@@ -104,15 +111,19 @@ nonterminal ETIQUETA1, ETIQUETA2, ETIQUETA3, ETIQUETA4, ETIQUETA5, ETIQUETA6, ET
 nonterminal LIST_VAL1, LIST_VAL2, LIST_VAL3, LIST_VAL4, LIST_VAL5, LIST_VAL6, LIST_VAL7, LIST_VAL8, LIST_VAL9;
 nonterminal VALOR_1, VALOR_2, VALOR_3, VALOR_4, VALOR_5, VALOR_6, VALOR_7, VALOR_8, VALOR_9, VALOR_N;
 // FUNCIONES CLC 
-nonterminal INSTRUCCIONES, INSTRUCCION, IMPRESION, DECLARACION, ASIGNACION, TIPOS, EXPRESION;
-nonterminal FUNCSP, CADENA, BLOINST, GET, CSP, ISTR, OPCIONES, LISTA_VAR, DECLA_ASIG, LISTA_ASIG, LISTA_OPCIONES;
-nonterminal SELIF, SIF;
-nonterminal REPETIR, CICLO;
+nonterminal LinkedList<Instruccion>INSTRUCCIONES;
+nonterminal Instruccion INSTRUCCION, IMPRESION, DECLARACION, ASIGNACION;
+nonterminal Instruccion EXPRESION;
+nonterminal Tipo TIPOS; 
+nonterminal FUNCSP, BLOINST, GET, CSP, ISTR, OPCIONES, LISTA_VAR, DECLA_ASIG, LISTA_ASIG, LISTA_OPCIONES;
+nonterminal Instruccion SELIF, SIF;
+nonterminal Instruccion REPETIR, CICLO;
 
 precedence left OR, AND, DIFER;
 precedence left EQUALS, MENOR, MAYOR;
 precedence left MAS, MENOS;
 precedence left POR, DIV;
+precedence left NOT;
 precedence left UMENOS;
 
 start with START;
@@ -296,72 +307,362 @@ LIST_VAL9 ::= VALOR_9
             | LIST_VAL9 VALOR_9;
 
 // VALORES
-VALOR_N ::= CORCHEA FONTSI IGUAL COMID size:a COMID CORCHEC {: styleAttributes += "font-size: "+a+";"; :}
-          | CORCHEA FONTFA IGUAL COMID family:a COMID CORCHEC {: styleAttributes += "font-family: "+a+";"; :}
-          | CORCHEA TEXTALI IGUAL COMID aling:a COMID CORCHEC {:styleAttributes += "text-align: "+a+";"; :}
-          | CORCHEA ID IGUAL COMID IDENTIFICADOR:a COMID CORCHEC {: RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString()); :};
+VALOR_N ::= CORCHEA FONTSI IGUAL CADENA:a CORCHEC {: styleAttributes += "font-size: "+a+";"; :}
+          | CORCHEA FONTFA IGUAL CADENA:a CORCHEC {: 
+                    if (a.equals("Arial")) {
+                      styleAttributes += "font-family: Arial, Helvetica, sans-serif;";
+                  } else if (a.equals("Courier")) {
+                      styleAttributes += "font-family: 'Courier New', Courier, monospace;";
+                  } else if (a.equals("Verdana")) {
+                      styleAttributes += "font-family: Verdana, Geneva, Tahoma, sans-serif;";
+                  } else if (a.equals("sans-serif")) {
+                      styleAttributes += "font-family:sans-serif;";
+                  } else {
+                      // Generar error si la fuente no es válida
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Fuente no válida: " + a, 
+                          aleft, 
+                          aright, 
+                          "Verifica la fuente utilizada"
+                      ));
+                  } :}
+          | CORCHEA TEXTALI IGUAL CADENA:a CORCHEC {:
+                if (a.equals("left") || a.equals("right") || a.equals("center") || a.equals("Justify")) {
+                      styleAttributes += "text-align: "+a+";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Alineacion no valida: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica las alineaciones"
+                      ));
+                  }
+           :}
+          | CORCHEA ID IGUAL CADENA:a CORCHEC {: 
+            if (a.matches("[-_$][a-zA-Z0-9_$-]*")){
+                      RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString());
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Id no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica la sintaxis del id"
+                      ));
+                  }
+          :};
 
-VALOR_1 ::= CORCHEA ID IGUAL COMID IDENTIFICADOR:a COMID CORCHEC {: RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA NAME IGUAL COMID VALOR:a COMID CORCHEC {: RESULT = " name=\""+a+"\" "; addToHtml(RESULT.toString()); :};
+VALOR_1 ::= CORCHEA ID IGUAL CADENA:a CORCHEC {: 
+                if (a.matches("[-_$][a-zA-Z0-9_$-]*")){
+                      RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString());
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Id no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica la sintaxis del id"
+                      ));
+                  }
+            :}
+          | CORCHEA NAME IGUAL CADENA:a CORCHEC {: RESULT = " name=\""+a+"\" "; addToHtml(RESULT.toString()); :};
 
-VALOR_2 ::= CORCHEA HREF IGUAL COMID enlace:a COMID CORCHEC {: RESULT = " href=\""+a+"\" "; addToHtml(RESULT.toString()); :};
+VALOR_2 ::= CORCHEA HREF IGUAL CADENA:a CORCHEC {: RESULT = " href=\""+a+"\" "; addToHtml(RESULT.toString()); :};
 
-VALOR_3 ::= CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: RESULT = " style=\"background: "+a+";\" "; addToHtml(RESULT.toString()); :}; 
+VALOR_3 ::= CORCHEA BACKG IGUAL CADENA:a CORCHEC {: 
+                    if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "background: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color para Background"
+                      ));
+                  }
+             :}; 
 
-VALOR_4 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";"; :}
+VALOR_4 ::= CORCHEA COLOR IGUAL CADENA:a CORCHEC {: 
+                  if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "color: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color"
+                      ));
+                  }
+        :}
           | VALOR_N;
 
-VALOR_5 ::= CORCHEA TYPE IGUAL COMID tipos:a COMID CORCHEC {: RESULT = " type=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA NAME IGUAL COMID VALOR:a COMID CORCHEC {: RESULT = " name=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";"; :}
+VALOR_5 ::= CORCHEA TYPE IGUAL CADENA:a CORCHEC {: 
+                if (a.equals("text") || a.equals("number") || a.equals("radio") || a.equals("checkbox")) {
+                      RESULT = " type=\""+a+"\" "; addToHtml(RESULT.toString());
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "tipos no validos: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica los Tipos"
+                      ));
+                  }
+             :}
+          | CORCHEA NAME IGUAL CADENA:a CORCHEC {: RESULT = " name=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+          | CORCHEA COLOR IGUAL CADENA:a CORCHEC {: 
+                    if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "color: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color"
+                      ));
+                  }
+             :}
           | VALOR_N;
 
-VALOR_6 ::= CORCHEA COLS IGUAL COMID ENTERO:a COMID CORCHEC {: RESULT = " cols=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA ROWS IGUAL COMID ENTERO:a COMID CORCHEC {: RESULT = " rows=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+VALOR_6 ::= CORCHEA COLS IGUAL CADENA:a CORCHEC {: RESULT = " cols=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+          | CORCHEA ROWS IGUAL CADENA:a CORCHEC {: RESULT = " rows=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | VALOR_N;
 
-VALOR_7 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";";:}
-          | CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "background: "+a+";"; :}
-          | CORCHEA CLASS IGUAL COMID clase:a COMID CORCHEC {: RESULT = " class=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+VALOR_7 ::= CORCHEA COLOR IGUAL CADENA:a CORCHEC {: 
+                if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "color: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color"
+                      ));
+                  }
+            :}
+          | CORCHEA BACKG IGUAL CADENA:a CORCHEC {: 
+                 if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "background: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color para Background"
+                      ));
+                  }
+           :}
+          | CORCHEA CLASS IGUAL CADENA:a CORCHEC {: 
+                if (a.equals("row") || a.equals("column")) {
+                      styleAttributes += "font-family: "+a+";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "tipos de clase no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica los Tipos de Clases"
+                      ));
+                  }
+             :}
           | VALOR_N;
 
-VALOR_8 ::= CORCHEA ID IGUAL COMID IDENTIFICADOR:a COMID CORCHEC {: RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA SRC IGUAL COMID enlace:a COMID CORCHEC {: RESULT = " src=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA WIDTH IGUAL COMID th:a COMID CORCHEC {: RESULT = " width=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA HEIGHT IGUAL COMID th:a COMID CORCHEC {: RESULT = " height=\""+a+"\" "; addToHtml(RESULT.toString()); :}
-          | CORCHEA ALT IGUAL COMID VALOR:a COMID CORCHEC {: RESULT = " alt=\""+a+"\" "; addToHtml(RESULT.toString()); :};
+VALOR_8 ::= CORCHEA ID IGUAL CADENA:a CORCHEC {: 
+                if (a.matches("[-_$][a-zA-Z0-9_$-]*")){
+                      RESULT = " id=\""+a+"\" "; addToHtml(RESULT.toString());
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Id no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica la sintaxis del id"
+                      ));
+                  }
+         :}
+          | CORCHEA SRC IGUAL CADENA:a CORCHEC {: RESULT = " src=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+          | CORCHEA WIDTH IGUAL CADENA:a CORCHEC {: RESULT = " width=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+          | CORCHEA HEIGHT IGUAL CADENA:a CORCHEC {: RESULT = " height=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+          | CORCHEA ALT IGUAL CADENA:a CORCHEC {: RESULT = " alt=\""+a+"\" "; addToHtml(RESULT.toString()); :};
 
-VALOR_9 ::= CORCHEA COLOR IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "color: "+a+";"; :}
-          | CORCHEA BACKG IGUAL COMID colo:a COMID CORCHEC {: styleAttributes += "background: "+a+";"; :}
-          | CORCHEA ONCLICK IGUAL COMID IDENTIFICADOR:a PAR1 PAR2 COMID CORCHEC {: RESULT = " onclick=\""+a+"\" "; addToHtml(RESULT.toString()); :}
+VALOR_9 ::= CORCHEA COLOR IGUAL CADENA:a CORCHEC {: 
+                    if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "color: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color"
+                      ));
+                  }
+             :}
+          | CORCHEA BACKG IGUAL CADENA:a CORCHEC {: 
+             if (a.matches("#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?") || 
+                      a.equals("black") || 
+                      a.equals("olive") || 
+                      a.equals("teal") || 
+                      a.equals("red") || 
+                      a.equals("blue") || 
+                      a.equals("maroon") || 
+                      a.equals("navy") || 
+                      a.equals("gray") || 
+                      a.equals("lime") || 
+                      a.equals("fuchsia") || 
+                      a.equals("green") || 
+                      a.equals("white") || 
+                      a.equals("purple") || 
+                      a.equals("silver") || 
+                      a.equals("yellow") || 
+                      a.equals("aqua")) {
+                      styleAttributes += "background: " + a + ";";
+                  } else {
+                      listaErrores.add(new Errores(
+                          "SEMANTICO", 
+                          "Color no valido: " + a, 
+                          aleft, 
+                          aright+2, 
+                          "Verifica el nombre o codigo hexa del color para Background"
+                      ));
+                  }
+           :}
+          | CORCHEA ONCLICK IGUAL CADENA:a CORCHEC {: RESULT = " onclick=\""+a+"\" "; addToHtml(RESULT.toString()); :}
           | VALOR_N;
 
 // FUNCIONES CLC
-INSTRUCCIONES ::= INSTRUCCION
-                | INSTRUCCIONES INSTRUCCION;
+INSTRUCCIONES ::= INSTRUCCION:a {: RESULT = new LinkedList<>(); RESULT.add(a); :}
+                | INSTRUCCIONES:a INSTRUCCION:b {: RESULT = a; RESULT.add(b); :};
 
-INSTRUCCION ::= IMPRESION
-              | DECLARACION
-              | ASIGNACION
+INSTRUCCION ::= IMPRESION:a   {:   RESULT=a;   :}
+              | DECLARACION:a {:   RESULT=a;   :}
+              | ASIGNACION:a  {:   RESULT=a;   :}
               | DECLA_ASIG
               | ISTR
               | BLOINST
-              | SIF
-              | REPETIR
-              | CICLO
+              | SIF:a         {:   RESULT=a;   :}
+              | REPETIR:a     {:   RESULT=a;   :}
+              | CICLO:a       {:   RESULT=a;   :}
               | IDENTIFICADOR PAR1 PAR2 CORCHEA INSTRUCCIONES CORCHEC
               | LOAD PAR1 PAR2 CORCHEA INSTRUCCIONES CORCHEC;
 
-IMPRESION ::= FUNCSP PAR1 EXPRESION PAR2 FINCADENA;
+IMPRESION ::= FUNCSP:a PAR1 EXPRESION:b PAR2 FINCADENA{:
+              Impresion imp = new Impresion(a.toString(), b.generarCodigo());
+              String jscode = imp.interprete();
+              addToHtml(jscode);
+              :};
 
-FUNCSP ::= ASC
-         | DESC
-         | LETPAR
-         | LETIMPAR
-         | REVERSE
-         | CARALE
-         | NUMALE
-         | ALEINF
+FUNCSP ::= ASC {: RESULT = "ASC"; :}
+         | DESC {: RESULT = "DESC"; :}
+         | LETPAR {: RESULT = "LETPAR"; :}
+         | LETIMPAR {: RESULT = "LETIMPAR"; :}
+         | REVERSE {: RESULT = "REVERSE"; :}
+         | CARALE {: RESULT = "CARACTER_ALEATORIO"; :}
+         | NUMALE {: RESULT = "NUM_ALEATORIO"; :}
+         | ALEINF {: RESULT = "ALERT_INFO"; :}
 ;
 
 CSP ::= EXIT PAR1 PAR2 FINCADENA
@@ -380,43 +681,41 @@ DECLA_ASIG ::= TIPOS LISTA_ASIG FINCADENA
 
 LISTA_ASIG ::= IDENTIFICADOR IGUAL EXPRESION
              | LISTA_ASIG COMA IDENTIFICADOR IGUAL EXPRESION;
-
-TIPOS ::= INTEGER
-        | DECIMAL 
-        | STRING
-        | CHAR 
-        | BOOLEAN 
+             
+TIPOS ::= INTEGER {:   RESULT=new Tipo(TipoDato.INTEGER);   :}
+        | DECIMAL {:   RESULT=new Tipo(TipoDato.DECIMAL);   :}
+        | STRING  {:   RESULT=new Tipo(TipoDato.STRING);   :}
+        | CHAR    {:   RESULT=new Tipo(TipoDato.CHAR);   :}
+        | BOOLEAN {:   RESULT=new Tipo(TipoDato.BOOLEAN);   :}
 ;
 
-CADENA ::= COMID VALOR COMID
-         | COMID ENTERO COMID;
+GET ::= ELEMENT PAR1 CARACTER PAR2;
 
-GET ::= ELEMENT PAR1 COMIS IDENTIFICADOR COMIS PAR2;
+ISTR ::= INSERT PAR1 CARACTER PAR2 FINCADENA;
 
-ISTR ::= INSERT PAR1 COMIS IDENTIFICADOR COMIS PAR2 FINCADENA;
-
-EXPRESION ::= MENOS EXPRESION %prec UMENOS
-            | DIFER EXPRESION
-            | EXPRESION MAS EXPRESION
-            | EXPRESION MENOS EXPRESION
-            | EXPRESION POR EXPRESION
-            | EXPRESION DIV EXPRESION
-            | EXPRESION IGUAL IGUAL EXPRESION %prec EQUALS 
-            | EXPRESION DIFER IGUAL EXPRESION %prec EQUALS
-            | EXPRESION MENOR IGUAL EXPRESION %prec EQUALS
-            | EXPRESION MAYOR IGUAL EXPRESION %prec EQUALS
-            | EXPRESION MENOR EXPRESION
-            | EXPRESION MAYOR EXPRESION
-            | EXPRESION OR EXPRESION
-            | EXPRESION AND EXPRESION
-            | CADENA
+EXPRESION ::= MENOS EXPRESION:a {: RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright); :} %prec UMENOS
+            | DIFER EXPRESION:a {: RESULT = new Logicos(a, OperadoresLogicos.NOT, aleft, aright); :} %prec NOT
+            | EXPRESION:a MAS EXPRESION:b    {: RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.SUMA, aleft, aright); :}
+            | EXPRESION:a MENOS EXPRESION:b  {: RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.RESTA, aleft, aright); :}   
+            | EXPRESION:a POR EXPRESION:b    {: RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.MULTIPLICACION, aleft, aright); :}
+            | EXPRESION:a DIV EXPRESION:b    {: RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.DIVISION, aleft, aright); :}
+            | EXPRESION:a IGUAL IGUAL EXPRESION:b {: RESULT = new Relacionales(a, b, OperadoresRelacionales.EQUALS, aleft, aright); :} %prec EQUALS 
+            | EXPRESION:a DIFER IGUAL EXPRESION:b {: RESULT = new Relacionales(a, b, OperadoresRelacionales.NOTEQUALS, aleft, aright); :} %prec EQUALS
+            | EXPRESION:a MENOR IGUAL EXPRESION:b {: RESULT = new Relacionales(a, b, OperadoresRelacionales.MENORIGUAL, aleft, aright); :} %prec EQUALS
+            | EXPRESION:a MAYOR IGUAL EXPRESION:b {: RESULT = new Relacionales(a, b, OperadoresRelacionales.MAYORIGUAL, aleft, aright); :} %prec EQUALS
+            | EXPRESION:a MENOR EXPRESION:b {: RESULT = new Relacionales(a, b, OperadoresRelacionales.MENORQUE, aleft, aright); :}
+            | EXPRESION:a MAYOR EXPRESION:b {: RESULT = new Relacionales(a, b, OperadoresRelacionales.MAYORQUE, aleft, aright); :}
+            | EXPRESION:a OR EXPRESION:b {: RESULT = new Logicos(a, b, OperadoresLogicos.OR, aleft, aright); :}
+            | EXPRESION:a AND EXPRESION:b {: RESULT = new Logicos(a, b, OperadoresLogicos.AND, aleft, aright); :}
+            | CADENA:a    {: RESULT = new Nativo(a, new Tipo(TipoDato.STRING), aleft, aright); :}
+            | CARACTER:a    {: RESULT = new Nativo(a, new Tipo(TipoDato.CHAR), aleft, aright); :}
             | GET
-            | IDENTIFICADOR
-            | ENTERO
-            | DECI 
-            | TRUE
-            | FALSE
-            | PAR1 EXPRESION PAR2;
+            | IDENTIFICADOR:a {: RESULT = new Variables(a, aleft, aright); :}
+            | ENTERO:a    {: RESULT = new Nativo(a, new Tipo(TipoDato.INTEGER), aleft, aright); :}
+            | DECI:a      {: RESULT = new Nativo(a, new Tipo(TipoDato.DECIMAL), aleft, aright); :}
+            | TRUE:a      {: RESULT = new Nativo(true, new Tipo(TipoDato.BOOLEAN), aleft, aright); :}
+            | FALSE:a     {: RESULT = new Nativo(false, new Tipo(TipoDato.BOOLEAN), aleft, aright); :}
+            | PAR1 EXPRESION:a PAR2 {: RESULT = a; :};
 
 LISTA_OPCIONES ::= OPCIONES
                  | LISTA_OPCIONES OPCIONES;

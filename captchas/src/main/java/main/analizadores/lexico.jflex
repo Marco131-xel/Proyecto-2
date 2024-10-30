@@ -48,9 +48,7 @@ LLAVEC="}"
 CORCHEA="["
 CORCHEC="]"
 DOSPTS=":"
-COMID="\""
 COMA=","
-COMIS= "\'"
 
 //CC = HTML 
 CC="C_CC"
@@ -148,11 +146,13 @@ clase="row"|"column"
 th="\d+(px|%)"
 BLANCOS=[\ \r\t\f\n]+
 ENTERO=(0|([1-9][0-9]*))
-DECI=(-)?([1-9][0-9]*)(\.[0-9]{1,4})?
+DECI=(0|([1-9][0-9]*))(\\.[0-9]{1,4})?
 IDENTIFICADOR=[a-zA-Z0-9_\-\$]+
+CADENA = [\"]([^\"])*[\"]
+CARACTER = [\']([^\'])*[\']
+COMENTARIO_LINEA="!!"[^\n]*
+COMENTARIO_MULTI="<!--"~"-->"
 VALOR=[a-zA-Z0-9_]+([ \t]*[a-zA-Z0-9_]+)*
-COMENTARIO_LINEA="!!"[^(\n|\r)]*
-COMENTARIO_MULTI="<!--" [^>]* "-->"
 
 %%
 // SIMBOLOS
@@ -174,9 +174,7 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {CORCHEA} {return new Symbol(sym.CORCHEA, yyline, yycolumn,yytext());}
 <YYINITIAL> {CORCHEC} {return new Symbol(sym.CORCHEC, yyline, yycolumn,yytext());}
 <YYINITIAL> {DOSPTS} {return new Symbol(sym.DOSPTS, yyline, yycolumn,yytext());}
-<YYINITIAL> {COMID} {return new Symbol(sym.COMID, yyline, yycolumn,yytext());}
 <YYINITIAL> {COMA} {return new Symbol(sym.COMA, yyline, yycolumn,yytext());}
-<YYINITIAL> {COMIS} {return new Symbol(sym.COMIS, yyline, yycolumn,yytext());}
 // CC = HTML
 <YYINITIAL> {CC} {return new Symbol(sym.CC, yyline, yycolumn,yytext());}
 <YYINITIAL> {HEAD} {return new Symbol(sym.HEAD, yyline, yycolumn,yytext());}
@@ -263,6 +261,16 @@ COMENTARIO_MULTI="<!--" [^>]* "-->"
 <YYINITIAL> {ENTERO} {return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
 <YYINITIAL> {DECI} {return new Symbol(sym.DECI, yyline, yycolumn,yytext());}
 <YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn,yytext());}
+<YYINITIAL> {CADENA} {
+    String cadena = yytext();
+    cadena = cadena.substring(1, cadena.length()-1);
+    return new Symbol(sym.CADENA, yyline, yycolumn,cadena);
+    }
+<YYINITIAL> {CARACTER} {
+    String caracter = yytext();
+    caracter = caracter.substring(1, caracter.length()-1);
+    return new Symbol(sym.CARACTER, yyline, yycolumn, caracter);
+    }
 <YYINITIAL> {VALOR} {return new Symbol(sym.VALOR, yyline, yycolumn,yytext());}
 
 <YYINITIAL> {BLANCOS} {}

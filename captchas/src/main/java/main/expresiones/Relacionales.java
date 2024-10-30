@@ -19,51 +19,33 @@ public class Relacionales extends Instruccion {
         this.cond2 = cond2;
         this.relacional = relacional;
     }
-
+    
     @Override
     public String generarCodigo() {
-        StringBuilder codigo = new StringBuilder();
-
-        // Verifica que ambos operandos estén presentes
-        if (cond1 != null && cond2 != null) {
-            // Agrega el código del primer operando
-            codigo.append(cond1.generarCodigo());
-
-            // Determina el operador en JavaScript según el tipo de operación relacional
-            switch (relacional) {
-                case EQUALS:
-                    codigo.append(" === ");
-                    break;
-                case NOTEQUALS:
-                    codigo.append(" !== ");
-                    break;
-                case MENORIGUAL:
-                    codigo.append(" <= ");
-                    break;
-                case MAYORIGUAL:
-                    codigo.append(" >= ");
-                    break;
-                case MENORQUE:
-                    codigo.append(" < ");
-                    break;
-                case MAYORQUE:
-                    codigo.append(" > ");
-                    break;
-                default:
-                    // Agregar un error si el operador es desconocido
-                    listaErrores.add(new Errores("SEMANTICO", "Operación relacional desconocida", this.linea, this.col, "Verifica el operador relacional"));
-                    return ""; // Retorna cadena vacía en caso de error
-            }
-
-            // Agrega el código del segundo operando
-            codigo.append(cond2.generarCodigo());
-        } else {
-            // Si alguno de los operandos es nulo, agrega un error
-            listaErrores.add(new Errores("SEMANTICO", "Faltan operandos en la expresión relacional", this.linea, this.col, "Verifica los operandos"));
-            return ""; // Retorna cadena vacía en caso de error
+        String codigo = "";
+        switch (relacional) {
+            case EQUALS:
+                codigo = cond1.generarCodigo() + " == " + cond2.generarCodigo();
+                break;
+            case NOTEQUALS:
+                codigo = cond1.generarCodigo() + " != " + cond2.generarCodigo();
+                break;
+            case MENORIGUAL:
+                codigo = cond1.generarCodigo() + " <= " + cond2.generarCodigo();
+                break;
+            case MAYORIGUAL:
+                codigo = cond1.generarCodigo() + " >= " + cond2.generarCodigo();
+                break;
+            case MENORQUE:
+                codigo = cond1.generarCodigo() + " < " + cond2.generarCodigo();
+                break;
+            case MAYORQUE:
+                codigo = cond1.generarCodigo() + " > " + cond2.generarCodigo();
+                break;
+            default:
+                listaErrores.add(new Errores("SEMANTICO", "Operación relacional desconocida", this.linea, this.col, "Verifica el operador relacional"));
         }
-
-        return codigo.toString();
+        return codigo;
     }
 
     @Override

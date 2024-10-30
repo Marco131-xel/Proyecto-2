@@ -37,7 +37,7 @@ public class Metodo extends Instruccion {
 
     @Override
     public String generarCodigo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return null;
     }
     
 }

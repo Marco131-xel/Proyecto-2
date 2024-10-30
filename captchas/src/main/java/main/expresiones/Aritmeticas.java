@@ -11,7 +11,7 @@ public class Aritmeticas extends Instruccion {
     private Instruccion ope2;
     private OperadoresAritmeticos operacion;
     private Instruccion ope0;
-    
+
     private LinkedList<Errores> listaErrores = new LinkedList<>();
 
     public Aritmeticas(Instruccion ope0, OperadoresAritmeticos operacion, int linea, int col) {
@@ -24,46 +24,35 @@ public class Aritmeticas extends Instruccion {
         super(new Tipo(TipoDato.INTEGER), linea, col);
         this.ope1 = ope1;
         this.ope2 = ope2;
+        this.operacion = operacion;
     }
 
     @Override
     public String generarCodigo() {
-        StringBuilder codigo = new StringBuilder();
-
-        // Caso para operaciones unarias como la negación
-        if (operacion == OperadoresAritmeticos.NEGACION && ope0 != null) {
-            codigo.append("-").append(ope0.generarCodigo());
-        } // Caso para operaciones binarias como suma, resta, etc.
-        else if (ope1 != null && ope2 != null) {
-            // Agrega el código del primer operando
-            codigo.append(ope1.generarCodigo());
-
-            switch (operacion) {
-                case SUMA:
-                    codigo.append(" + ");
-                    break;
-                case RESTA:
-                    codigo.append(" - ");
-                    break;
-                case MULTIPLICACION:
-                    codigo.append(" * ");
-                    break;
-                case DIVISION:
-                    codigo.append(" / ");
-                    break;
-                default:
-                    listaErrores.add(new Errores("SEMANTICO", "Operación desconocida en Aritmeticas", this.linea, this.col, "Verifica el operador"));
-                    return "";
-            }
-
-            // Agrega el código del segundo operando
-            codigo.append(ope2.generarCodigo());
-        } else {
-            listaErrores.add(new Errores("SEMANTICO", "Faltan operandos en la expresión aritmética", this.linea, this.col, "Verifica los operandos"));
-            return "";
+        String codigo = "";
+        switch (operacion) {
+            case SUMA:
+                codigo = ope1.generarCodigo() + " + " + ope2.generarCodigo();
+                break;
+            case RESTA:
+                codigo = ope1.generarCodigo() + " - " + ope2.generarCodigo();
+                break;
+            case MULTIPLICACION:
+                codigo = ope1.generarCodigo() + " * " + ope2.generarCodigo();
+                break;
+            case DIVISION:
+                if (ope2.generarCodigo().equals("0")) {
+                    listaErrores.add(new Errores("SEMANTICO", "División por cero", linea, col, "Revisa el divisor"));
+                }
+                codigo = ope1.generarCodigo() + " / " + ope2.generarCodigo();
+                break;
+            case NEGACION:
+                codigo = "-" + ope0.generarCodigo();
+                break;
+            default:
+                listaErrores.add(new Errores("SEMANTICO", "Operación aritmética desconocida", linea, col, "Verifica el operador"));
         }
-
-        return codigo.toString();
+        return codigo;
     }
 
     @Override
