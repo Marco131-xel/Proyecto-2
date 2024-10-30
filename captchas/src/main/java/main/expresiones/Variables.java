@@ -23,6 +23,11 @@ public class Variables extends Instruccion {
         }
         return id;
     }
+    
+    @Override
+    public String toString(){
+        return id;
+    }
 
     @Override
     public Object interpretar(Arbol arbol, TablaSimbolos tabla) {

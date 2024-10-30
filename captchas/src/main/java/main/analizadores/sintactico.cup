@@ -82,14 +82,6 @@ terminal INIT, END, INSERT;
 // SENTENCIAS Y  CICLOS
 terminal IF, THEN, ELSE, ELIF, REPEAT, HUNTIL, WHILE, THENWHILE, ELEMENT, GLOBAL, LOAD;
 // EXPRESIONES REGULARES
-terminal String enlace;
-terminal String colo;
-terminal String size;
-terminal String family;
-terminal String aling;
-terminal String tipos;
-terminal String clase;
-terminal String th;
 terminal String ENTERO;
 terminal String DECI;
 terminal String IDENTIFICADOR;
@@ -115,7 +107,7 @@ nonterminal LinkedList<Instruccion>INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION, IMPRESION, DECLARACION, ASIGNACION;
 nonterminal Instruccion EXPRESION;
 nonterminal Tipo TIPOS; 
-nonterminal FUNCSP, BLOINST, GET, CSP, ISTR, OPCIONES, LISTA_VAR, DECLA_ASIG, LISTA_ASIG, LISTA_OPCIONES;
+nonterminal FUNCSP, BLOINST, GET, CSP, ISTR, OPCIONES, LISTA_VAR, DECLA_ASIG, LISTA_OPCIONES;
 nonterminal Instruccion SELIF, SIF;
 nonterminal Instruccion REPETIR, CICLO;
 
@@ -668,19 +660,28 @@ FUNCSP ::= ASC {: RESULT = "ASC"; :}
 CSP ::= EXIT PAR1 PAR2 FINCADENA
       | REDIRECT PAR1 PAR2 FINCADENA;
 
-ASIGNACION ::= LISTA_VAR IGUAL EXPRESION FINCADENA;
+ASIGNACION ::= LISTA_VAR:a IGUAL EXPRESION:b FINCADENA{:
+                    AsignacionVar av = new AsignacionVar(a.toString(), b, aleft, aright);
+                    String jscode = av.generarCodigo();
+                    addToHtml(jscode);
+                :};
 
-DECLARACION ::= TIPOS LISTA_VAR FINCADENA
+DECLARACION ::= TIPOS:a LISTA_VAR:b FINCADENA {: 
+                DeclaracionVar dv = new DeclaracionVar(a, b.toString(), aleft, aright);
+                String jscode = dv.generarCodigo();
+                addToHtml(jscode);
+                 :}
               | TIPOS GLOBAL LISTA_VAR FINCADENA;
 
-LISTA_VAR ::= IDENTIFICADOR
-            | LISTA_VAR COMA IDENTIFICADOR;              
+LISTA_VAR ::= IDENTIFICADOR:a {: RESULT = new Variables(a, aleft, aright); :}
+            | LISTA_VAR COMA IDENTIFICADOR:a {: RESULT = new Variables(a, aleft, aright); :};              
 
-DECLA_ASIG ::= TIPOS LISTA_ASIG FINCADENA
-             | TIPOS GLOBAL LISTA_ASIG FINCADENA;
-
-LISTA_ASIG ::= IDENTIFICADOR IGUAL EXPRESION
-             | LISTA_ASIG COMA IDENTIFICADOR IGUAL EXPRESION;
+DECLA_ASIG ::= TIPOS:a LISTA_VAR:b IGUAL EXPRESION:c FINCADENA{:
+                DeclaYAsigVar dyav = new DeclaYAsigVar(a, b.toString(), c, aleft, aright);
+                String jscode = dyav.generarCodigo();
+                addToHtml(jscode);
+            :}
+             | TIPOS GLOBAL IDENTIFICADOR IGUAL EXPRESION FINCADENA;
              
 TIPOS ::= INTEGER {:   RESULT=new Tipo(TipoDato.INTEGER);   :}
         | DECIMAL {:   RESULT=new Tipo(TipoDato.DECIMAL);   :}
@@ -711,8 +712,8 @@ EXPRESION ::= MENOS EXPRESION:a {: RESULT = new Aritmeticas(a, OperadoresAritmet
             | CARACTER:a    {: RESULT = new Nativo(a, new Tipo(TipoDato.CHAR), aleft, aright); :}
             | GET
             | IDENTIFICADOR:a {: RESULT = new Variables(a, aleft, aright); :}
-            | ENTERO:a    {: RESULT = new Nativo(a, new Tipo(TipoDato.INTEGER), aleft, aright); :}
-            | DECI:a      {: RESULT = new Nativo(a, new Tipo(TipoDato.DECIMAL), aleft, aright); :}
+            | ENTERO:a    {: RESULT = new Nativo(Integer.parseInt (a), new Tipo(TipoDato.INTEGER), aleft, aright); :}
+            | DECI:a      {: RESULT = new Nativo(Double.parseDouble(a), new Tipo(TipoDato.DECIMAL), aleft, aright); :}
             | TRUE:a      {: RESULT = new Nativo(true, new Tipo(TipoDato.BOOLEAN), aleft, aright); :}
             | FALSE:a     {: RESULT = new Nativo(false, new Tipo(TipoDato.BOOLEAN), aleft, aright); :}
             | PAR1 EXPRESION:a PAR2 {: RESULT = a; :};

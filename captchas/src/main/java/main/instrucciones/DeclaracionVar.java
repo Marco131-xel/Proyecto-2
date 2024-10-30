@@ -17,7 +17,7 @@ public class DeclaracionVar extends Instruccion {
 
     @Override
     public String generarCodigo() {
-        return "let" + id + ";";
+        return "let " + id + ";\n";
     }
 
     @Override

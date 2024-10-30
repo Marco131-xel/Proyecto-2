@@ -17,7 +17,7 @@ public class AsignacionVar extends Instruccion{
 
     @Override
     public String generarCodigo() {
-        return  id + " = " + exp.generarCodigo() + ";";
+        return  id + " = " + exp.generarCodigo() + ";\n";
     }
 
     @Override

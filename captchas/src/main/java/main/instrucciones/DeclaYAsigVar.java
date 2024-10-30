@@ -18,7 +18,7 @@ public class DeclaYAsigVar extends Instruccion  {
 
     @Override
     public String generarCodigo() {
-        return "let" + id + " = " + exp.generarCodigo() + ";";
+        return "let" + id + " = " + exp.generarCodigo() + ";\n";
     }
 
     @Override

@@ -18,21 +18,21 @@ public class Impresion {
     public String interprete() {
         switch (funcion) {
             case "ASC":
-                return "console.log(" + expresion + ".sort())";
+                return "console.log(" + expresion + ".sort());\n";
             case "DESC":
-                return "console.log(" + expresion + ".sort().reverse())";
+                return "console.log(" + expresion + ".sort().reverse());\n";
             case "LETPAR":
-                return "console.log(" + expresion + ".filter(n => n % 2 === 0))";
+                return "console.log(" + expresion + ".filter(n => n % 2 === 0));\n";
             case "LETIMPAR":
-                return "console.log(" + expresion + ".filter(n => n % 2 !== 0))";
+                return "console.log(" + expresion + ".filter(n => n % 2 !== 0));\n";
             case "REVERSE":
-                return "console.log(" + expresion + ".reverse());";
+                return "console.log(" + expresion + ".reverse())\n;";
             case "CARALE":
-                return "console.log(" + expresion + ".charAt(Math.floor(Math.random() * " + expresion + ".length)));";
+                return "console.log(" + expresion + ".charAt(Math.floor(Math.random() * " + expresion + ".length)));\n";
             case "NUMALE":
-                return "console.log(Math.floor(Math.random() * " + expresion + "));";
+                return "console.log(Math.floor(Math.random() * " + expresion + "));\n";
             case "ALEINF":
-                return "console.log(Math.random());";
+                return "console.log(Math.random());\n";
             default:
                 listaErrores.add(new Errores("SEMANTICO", "Operación desconocida en Aritmeticas", 0, 0, "Verifica el operador"));
                 return "";

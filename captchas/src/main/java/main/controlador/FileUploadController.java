@@ -33,7 +33,7 @@ public class FileUploadController {
             System.out.println("Archivo recibido: " + file.getOriginalFilename());
             MakeCC make = new MakeCC();
             String ruta = System.getProperty("user.dir");
-            String outputFile = ruta + "/target/data/" + file.getOriginalFilename().replace(".cc", ".html");
+            String outputFile = ruta + "/target/data/" + file.getOriginalFilename().replace(".cc", ".html");            
             
             System.out.println("Ruta de salida: " + outputFile);
             LinkedList<Errores> errores = make.translatehtml(file.getInputStream(), outputFile);
@@ -42,7 +42,7 @@ public class FileUploadController {
                 System.out.println("Se encontraron errores: " + errores);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
             }
-            
+                        
             System.out.println("Procesamiento exitoso, enviando respuesta.");
             return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body("Archivo subido y procesado exitosamente");
         } catch (Exception e) {

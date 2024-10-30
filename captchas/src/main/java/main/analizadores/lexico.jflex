@@ -134,16 +134,6 @@ GLOBAL="@global"
 LOAD="ON_LOAD"
 
 // EXPRESIONES REGULARES
-enlace=(https?:\/\/)?([\da-z\.-]+)\.([\/\w \.-]*)*\/?
-colo=#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?|"black"|"olive"|"teal"|"red"|"blue"|
-        "maroon"|"navy"|"gray"|"lime"|"fuchsia"|"green"|"white"|"purple"|
-        "silver"|"yellow"|"aqua"
-size="\d+px"
-family="Courier"|"Verdana"|"Arial"|"Geneva"|"sans-serif"
-aling="left"|"right"|"center"|"justify"
-tipos="text"|"number"|"radio"|"checkbox"
-clase="row"|"column"
-th="\d+(px|%)"
 BLANCOS=[\ \r\t\f\n]+
 ENTERO=(0|([1-9][0-9]*))
 DECI=(0|([1-9][0-9]*))(\\.[0-9]{1,4})?
@@ -250,14 +240,6 @@ VALOR=[a-zA-Z0-9_]+([ \t]*[a-zA-Z0-9_]+)*
 <YYINITIAL> {GLOBAL} {return new Symbol(sym.GLOBAL, yyline, yycolumn,yytext());}
 <YYINITIAL> {LOAD} {return new Symbol(sym.LOAD, yyline, yycolumn,yytext());}
 // EXPRESIONES REGULARES
-<YYINITIAL> {enlace} {return new Symbol(sym.enlace, yyline, yycolumn,yytext());}
-<YYINITIAL> {colo} {return new Symbol(sym.colo, yyline, yycolumn,yytext());}
-<YYINITIAL> {size} {return new Symbol(sym.size, yyline, yycolumn,yytext());}
-<YYINITIAL> {family} {return new Symbol(sym.family, yyline, yycolumn,yytext());}
-<YYINITIAL> {aling} {return new Symbol(sym.aling, yyline, yycolumn,yytext());}
-<YYINITIAL> {tipos} {return new Symbol(sym.tipos, yyline, yycolumn,yytext());}
-<YYINITIAL> {clase} {return new Symbol(sym.clase, yyline, yycolumn,yytext());}
-<YYINITIAL> {th} {return new Symbol(sym.th, yyline, yycolumn,yytext());}
 <YYINITIAL> {ENTERO} {return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
 <YYINITIAL> {DECI} {return new Symbol(sym.DECI, yyline, yycolumn,yytext());}
 <YYINITIAL> {IDENTIFICADOR} {return new Symbol(sym.IDENTIFICADOR, yyline, yycolumn,yytext());}
